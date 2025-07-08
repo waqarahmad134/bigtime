@@ -144,24 +144,24 @@ export default function Homes() {
       {/* PAGE CONTENT */}
       <div className="w-full flex-grow flex items-center justify-center">
         {/* Your page content goes here */}
-        <div class="w-full min-h-screen bg-transparent text-white p-4">
-          <div class="  grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <div class="lg:col-span-3 space-y-8">
-              <div class="relative rounded-lg overflow-hidden">
+        <div className="w-full min-h-screen bg-transparent text-white p-4">
+          <div className="  grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3 space-y-8">
+              <div className="relative rounded-lg overflow-hidden">
                 <Image src={hogwarts} alt="hogwarts" className="min-h-64" />
 
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                  <h2 class="text-3xl font-bold">HOGWARTS LEGACY</h2>
-                  <p class="text-sm mt-1 max-w-lg">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                  <h2 className="text-3xl font-bold">HOGWARTS LEGACY</h2>
+                  <p className="text-sm mt-1 max-w-lg">
                     Hogwarts Legacy is an immersive, open world action RPG set
                     in the world first introduced in the Harry Potter books.
                   </p>
-                  <div class="mt-4 flex items-center gap-3">
-                    <button class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
+                  <div className="mt-4 flex items-center gap-3">
+                    <button className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
                       Buy now
                     </button>
-                    <span class="text-lg font-semibold">$24.00</span>
-                    <span class="text-sm text-gray-300 line-through">
+                    <span className="text-lg font-semibold">$24.00</span>
+                    <span className="text-sm text-gray-300 line-through">
                       $54.00
                     </span>
                   </div>
@@ -169,8 +169,8 @@ export default function Homes() {
               </div>
 
               <div>
-                <h3 class="text-xl font-bold mb-4">ACTUAL GAMES</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <h3 className="text-xl font-bold mb-4">ACTUAL GAMES</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {actualGames.map((game) => (
                     <div
                       key={game.title}
@@ -201,8 +201,8 @@ export default function Homes() {
               </div>
 
               <div>
-                <h3 class="text-xl font-bold mb-4">POPULAR GAMES</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <h3 className="text-xl font-bold mb-4">POPULAR GAMES</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {popularGames.map((game) => (
                     <div
                       key={game.title}
@@ -232,8 +232,8 @@ export default function Homes() {
                 </div>
               </div>
               <div>
-                <h3 class="text-xl font-bold mb-4">MOST POPULAR GAMES</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <h3 className="text-xl font-bold mb-4">MOST POPULAR GAMES</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {mostPopularGames.map((game) => (
                     <div
                       key={game.title}
@@ -264,7 +264,7 @@ export default function Homes() {
               </div>
             </div>
 
-            <aside class="space-y-6">
+            <aside className="space-y-6">
               <div className="bg-[#2b0a59] rounded-lg p-4 w-full">
                 <h3 className="text-white text-lg font-semibold mb-4">
                   Friends online

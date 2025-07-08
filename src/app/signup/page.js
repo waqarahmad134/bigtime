@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function signup() {
-    const router=useRouter()
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -34,40 +34,38 @@ export default function signup() {
     }));
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/auth/signup/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: formData.firstName + formData.lastName, // or however you'd like to combine/make usernames
-        email: formData.email,
-        password: formData.password,
-        confirm_password: formData.confirmPassword,
-      }),
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/signup/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.firstName + formData.lastName, // or however you'd like to combine/make usernames
+          email: formData.email,
+          password: formData.password,
+          confirm_password: formData.confirmPassword,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      console.log("Signup successful", data);
-      // router.push("/otp"); 
-      router.push(`/otp?email=${encodeURIComponent(formData.email)}`);
-
-    } else {
-      console.error("Signup failed", data);
-      alert(data?.message || "Signup failed");
+      if (response.ok) {
+        console.log("Signup successful", data);
+        // router.push("/otp");
+        router.push(`/otp?email=${encodeURIComponent(formData.email)}`);
+      } else {
+        console.error("Signup failed", data);
+        alert(data?.message || "Signup failed");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      alert("An error occurred. Please try again.");
     }
-  } catch (error) {
-    console.error("Error during signup:", error);
-    alert("An error occurred. Please try again.");
-  }
-};
-
+  };
 
   const handleSocialLogin = (provider) => {
     console.log(`Login with ${provider}`);
@@ -76,25 +74,23 @@ export default function signup() {
   return (
     <div className="relative min-h-screen flex">
       {/* Background */}
-      <Image
-        src={bgImage}
-        alt="Background"
-        fill
-        className="object-cover pointer-events-none select-none -z-10"
-        priority
-      />
+      <div className="before:content-[''] before:absolute before:inset-0 before:bg-[#160430]/60 before:z-[-5]">
+        <Image
+          src={bgImage}
+          alt="Background"
+          fill
+          className="object-cover pointer-events-none select-none -z-10"
+          priority
+        />
+      </div>
 
-      <div className="min-h-screen  flex items-center justify-center p-4 w-full max-w-4xl mx-auto">
-        {/* Background decoration */}
-
+      <div className="font-poppins min-h-screen flex items-center justify-center p-4 w-full max-w-4xl mx-auto">
         <div className="mb-8 absolute top-5 left-5">
-          <Image src={Logo} alt="Big Time Logo"  />
+          <Image src={Logo} alt="Big Time Logo" width={96} />
         </div>
-        <div className=" w-full flex ">
-          {/* Logo */}
-
+        <div className="w-full flex">
           {/* Sign Up Form */}
-          <div className=" p-8 w-full">
+          <div className="p-8 w-full">
             <h1 className="text-[30px] md:text-[60px] font-bold text-white text-center mb-8">
               SIGN UP
             </h1>
@@ -114,7 +110,7 @@ export default function signup() {
                       value={formData.firstName}
                       onChange={handleInputChange}
                       placeholder="Enter Your First Name"
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
+                      className="w-full bg-[#261046] border border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
                     />
                   </div>
                 </div>
@@ -131,7 +127,7 @@ export default function signup() {
                       value={formData.lastName}
                       onChange={handleInputChange}
                       placeholder="Enter Your Last Name"
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
+                      className="w-full bg-[#261046] border border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
                     />
                   </div>
                 </div>
@@ -149,7 +145,7 @@ export default function signup() {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="Enter Your Email"
-                      className="w-full bg-white/10 border-2 border-blue-400 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-blue-300 "
+                      className="w-full bg-[#261046] border-2 border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-blue-300 "
                     />
                   </div>
                 </div>
@@ -166,12 +162,12 @@ export default function signup() {
                       value={formData.phoneNumber}
                       onChange={handleInputChange}
                       placeholder="Enter Your Phone Number"
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                      className="w-full bg-[#261046] border border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                     />
                   </div>
                 </div>
               </div>
-             
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-24">
                 <div>
                   <label className="block text-white text-sm font-semibold mb-2">
@@ -185,7 +181,7 @@ export default function signup() {
                       value={formData.password}
                       onChange={handleInputChange}
                       placeholder="Enter Your Password"
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-10 pr-12 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
+                      className="w-full bg-[#261046] border border-white/20 rounded-lg px-10 pr-12 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
                     />
                     <button
                       type="button"
@@ -213,7 +209,7 @@ export default function signup() {
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
                       placeholder="Enter Your Confirm Password"
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-10 pr-12 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
+                      className="w-full bg-[#261046] border border-white/20 rounded-lg px-10 pr-12 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent "
                     />
                     <button
                       type="button"
@@ -234,54 +230,58 @@ export default function signup() {
 
               {/* Sign Up Button */}
               <div className="flex items-center justify-center">
-
-              <button
-                onClick={handleSubmit}
-                className="w-full max-w-sm cursor-pointer mx-auto bg-[#3B2063] text-white font-semibold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
-
-              >
-                Sign Up
-              </button>
+                <button
+                  onClick={handleSubmit}
+                  className="w-full max-w-sm cursor-pointer mx-auto bg-[#3B2063] text-white font-semibold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  Sign Up
+                </button>
               </div>
-<div className="max-w-sm mx-auto">
+              <div className="max-w-sm mx-auto">
+                {/* Divider */}
+                <div className="flex items-center justify-center my-6">
+                  <div className="border-t border-white/20 flex-grow"></div>
 
-              {/* Divider */}
-              <div className="flex items-center justify-center my-6">
-                <div className="border-t border-white/20 flex-grow"></div>
-              
-                <div className="border-t border-white/20 flex-grow"></div>
+                  <div className="border-t border-white/20 flex-grow"></div>
+                </div>
+                <div className="flex justify-between items-center text-sm text-gray-300 mb-6">
+                  <label className="inline-flex items-center">
+                    <span className=" text-[white]">Or continue with</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <span className="ml-2 cursor-pointer text-[white]">
+                      HAVE AN ACCOUNT?
+                      <span
+                        className="text-[white]"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          router.push("/login");
+                        }}
+                      >
+                        LOGIN
+                      </span>{" "}
+                    </span>
+                  </label>
+                </div>
+                {/* Social Login Buttons */}
+                <div className="flex-[1] flex gap-1 justify-center w-full">
+                  <button className="flex w-full cursor-pointer items-center justify-center gap-2  bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-3 rounded-xl">
+                    <Image src={google} alt="google" />
+                  </button>
+                  <button className="flex w-full items-center cursor-pointer justify-center gap-2  bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-3 rounded-xl">
+                    <Image src={facebook} alt="facebook" />
+                  </button>
+                </div>
+
+                {/* Login Link */}
+                <p className="mt-4 text-xs text-white text-start">
+                  By registering you agree with our{" "}
+                  <Link href="/terms" className="text-[#9D5CE9]">
+                    Terms and Conditions
+                  </Link>
+                  .
+                </p>
               </div>
-   <div className="flex justify-between items-center text-sm text-gray-300 mb-6">
-              <label className="inline-flex items-center">
-                <span className=" text-[white]">Or continue with</span>
-              </label>
-              <label className="inline-flex items-center">
-                <span className="ml-2 cursor-pointer text-[white]">HAVE AN ACCOUNT?<span className="text-[white]"  onClick={(e)=>{
-                e.preventDefault()
-router.push("/login")
-              }
-                }>LOGIN</span> </span>
-              </label>
-            </div>
-              {/* Social Login Buttons */}
-              <div className="flex-[1] flex gap-1 justify-center w-full">
-                           <button className="flex w-full cursor-pointer items-center justify-center gap-2  bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-3 rounded-xl">
-                           <Image src={google} alt="google"/>
-                           </button>
-                           <button className="flex w-full items-center cursor-pointer justify-center gap-2  bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-3 rounded-xl">
-                              <Image src={facebook} alt="facebook"/>
-                           </button>
-                         </div>
-
-              {/* Login Link */}
-              <p className="mt-4 text-xs text-white text-start">
-            By registering you agree with our{" "}
-            <Link href="/terms" className="text-[#9D5CE9]">
-              Terms and Conditions
-            </Link>
-            .
-          </p>
-</div>
             </div>
           </div>
         </div>

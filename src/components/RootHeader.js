@@ -10,6 +10,7 @@ import {
   Settings,
   HelpCircle,
   Gamepad2,
+  LogIn,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -32,8 +33,11 @@ export default function RootHeader() {
     { name: "Payment", icon: <Wallet size={16} />, href: "/payment" },
     { name: "Rewards", icon: <Sparkles size={16} />, href: "/rewards" },
     { name: "Tournaments", icon: <Trophy size={16} />, href: "/tournaments" },
-    // { name: "Settings", icon: <Settings size={16} />, href: "/settings" },
-    // { name: "Help", icon: <HelpCircle size={16} />, href: "/help" },
+    { name: "Settings", icon: <Settings size={16} />, href: "/settings" },
+    { name: "Help", icon: <HelpCircle size={16} />, href: "/help" },
+    { name: "login", icon: <LogIn size={16} />, href: "/otp" },
+    { name: "login", icon: <LogIn size={16} />, href: "/login" },
+    // { name: "logout", icon: <LogOut size={16} />, href: "/logout" },
   ];
 
   return (

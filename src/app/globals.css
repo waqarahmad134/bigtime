@@ -24,3 +24,18 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Font Classes */
+.font-bebas-neue {
+  font-family: var(--font-bebas-neue);
+}
+
+.font-poppins {
+  font-family: var(--font-poppins);
+}
+
+.theme-inner-shadow {
+  box-shadow: 4px 1px 39px -16px rgba(0, 0, 0, 0.94) inset;
+  -webkit-box-shadow: 4px 1px 39px -16px rgba(0, 0, 0, 0.94) inset;
+  -moz-box-shadow: 4px 1px 39px -16px rgba(0, 0, 0, 0.94) inset;
+}

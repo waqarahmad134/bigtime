@@ -3,7 +3,7 @@ import Image from "next/image";
 import bgImage from "@/assets/Images/BackgroundImage.png";
 import google from "@/assets/Images/google.png";
 import facebook from "@/assets/Images/facebook.png";
-import Logo from "@/assets/Images/arrowBack.png";
+import Logo from "@/assets/Images/Logo.png";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import Link from "next/link";
 import { Lock, Mail } from "lucide-react";
@@ -87,42 +87,43 @@ function OTPForm() {
   return (
     <div className="relative min-h-screen flex">
       {/* Background */}
-      <Image
-        src={bgImage}
-        alt="Background"
-        fill
-        className="object-cover pointer-events-none select-none -z-10"
-        priority
-      />
+      <div className="before:content-[''] before:absolute before:inset-0 before:bg-[#160430]/60 before:z-[-5]">
+        <Image
+          src={bgImage}
+          alt="Background"
+          fill
+          className="object-cover pointer-events-none select-none -z-10"
+          priority
+        />
+      </div>
 
       {/* Left side – branding */}
-      <div className="w-1/2 flex-col justify-center px-16 hidden md:flex">
+      <div className="font-semibold w-1/2 flex-col justify-center px-16 hidden md:flex">
         <div className="mb-8 absolute top-5 left-5">
-          <Image src={Logo} alt="Big Time Logo" />
+          <Image src={Logo} alt="Big Time Logo" width={96} />
         </div>
-        <h1 className="text-[65px] font-bold text-white leading-tight">
+        <h1 className="font-bebas-neue text-[72px] font-bold text-white leading-tight">
           BIG TIME
         </h1>
         <div className="leading-none">
-          <p className="mt-4 text-[25px] md:text-[40px] text-white uppercase">
+          <p className="text-[36px] md:text-[40px] text-white uppercase">
             OTP Verification
           </p>
         </div>
       </div>
 
       {/* Right side – login form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center px-16">
-        <div className="w-full max-w-md text-white bg-opacity-10 backdrop-blur-md rounded-xl p-8">
-          <h2 className="text-2xl font-semibold text-white mb-6">Verification Code</h2>
-          
+      <div className="font-poppins w-full md:w-1/2 flex items-center justify-center px-16">
+        <div className="w-full max-w-md text-white rounded-xl p-8">
+          <h2 className="text-3xl font-semibold text-white">Verification Code</h2>
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-sm text-gray-200 mt-3 pb-8">
+              <label className="block text-sm text-[#B6B6B6] mt-3 pb-5">
                 We have sent the verification code to your email address
               </label>
             </div>
 
-            <div className="flex justify-between gap-2 sm:gap-4 mb-10">
+            <div className="flex justify-between gap-1 sm:gap-2 mb-10">
               {otp.map((digit, idx) => (
                 <input
                   key={idx}
@@ -134,19 +135,20 @@ function OTPForm() {
                   onChange={(e) => handleChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
                   ref={(el) => (inputsRef.current[idx] = el)}
-                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-center text-xl sm:text-2xl md:text-3xl bg-transparent border border-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 text-center text-xl sm:text-2xl md:text-3xl bg-transparent border border-white/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
                   disabled={isLoading}
                 />
               ))}
             </div>
-            
-            <button
-              type="submit"
-              disabled={isLoading || otp.some(digit => !digit)}
-              className="w-full py-3 bg-[#3B2063] cursor-pointer text-white rounded-xl uppercase tracking-wide transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              {isLoading ? "Confirming..." : "Confirm"}
-            </button>
+            <div className="w-3/4 m-auto">
+              <button
+                type="submit"
+                disabled={isLoading || otp.some(digit => !digit)}
+                className="w-full py-3 bg-gradient-to-r from-[#653DCD]  to-[#7A59FF] cursor-pointer text-white rounded-xl uppercase tracking-wide transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {isLoading ? "Confirming..." : "Confirm"}
+              </button>
+            </div>
           </form>
         </div>
       </div>
