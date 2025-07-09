@@ -23,35 +23,11 @@ import forza1 from "@/assets/Images/forza1.jpg";
 import gta from "@/assets/Images/gta.jpg";
 import roblox from "@/assets/Images/roblox.jpg";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import RootHeader from "@/components/RootHeader";
-import Discount from "@/components/discount";
-import FriendsOnline from "@/components/friendsOnline";
-import RecentlyPlayed from "@/components/recentlyPlayed";
 
 export default function Homes() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [active, setActive] = useState("Home");
   const router = useRouter();
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const links = [
-    { name: "Home", icon: <Home size={16} />, href: "/" },
-    { name: "Profile & Avatar", icon: <User size={16} />, href: "/profile" },
-    { name: "leaderboard", icon: <Trophy size={16} />, href: "/leaderboard" },
-    { name: "Wallet", icon: <Wallet size={16} />, href: "/wallet" },
-    { name: "Referral Program", icon: <Gift size={16} />, href: "/referral" },
-    { name: "Sweepstake", icon: <Sparkles size={16} />, href: "/sweepstakes" },
-    { name: "Payment", icon: <Wallet size={16} />, href: "/payment" },
-    { name: "Rewards", icon: <Sparkles size={16} />, href: "/rewards" },
-    { name: "Tournament", icon: <Trophy size={16} />, href: "/tournaments" },
-    // { name: "Settings", icon: <Settings size={16} />, href: "/settings" },
-    // { name: "Help", icon: <HelpCircle size={16} />, href: "/help" },
-  ];
 
   const actualGames = [
     {
@@ -73,6 +49,7 @@ export default function Homes() {
       image: forza,
     },
   ];
+
   const popularGames = [
     {
       title: "Pubg Mobile by krafton",
@@ -93,6 +70,7 @@ export default function Homes() {
       image: minecraft,
     },
   ];
+
   const mostPopularGames = [
     {
       title: "forza horizon",
@@ -134,7 +112,6 @@ export default function Homes() {
               <div className="lg:col-span-3 space-y-8">
                 <div className="relative rounded-lg overflow-hidden">
                   <Image src={hogwarts} alt="hogwarts" className="min-h-64" />
-
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                     <h2 className="text-3xl font-bold">HOGWARTS LEGACY</h2>
                     <p className="text-sm mt-1 max-w-lg">
@@ -248,54 +225,9 @@ export default function Homes() {
                   </div>
                 </div>
               </div>
-
-              
             </div>
           </div>
         </div>
-        {/* Sidebar Overlay */}
-        {isSidebarOpen && (
-          <div className="fixed top-0 left-0 w-64 h-full bg-[#2b0a59]  text-white z-50 overflow-y-auto">
-            <aside className="w-full   p-4 text-white flex flex-col">
-              <div className="flex items-center gap-3 mb-6">
-                <button
-                  className="w-10 h-10 bg-[#7A59FF] rounded-lg flex items-center justify-center hover:bg-[#5d37a2] transition"
-                  onClick={toggleSidebar}
-                >
-                  <Gamepad2 size={16} className="text-black" />
-                </button>
-                <span className="text-lg font-bold ml-2">BIG TIME</span>
-              </div>
-
-              <nav className="flex flex-col gap-2 flex-grow overflow-y-auto">
-                {links.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => {
-                      setActive(link.name);
-                      toggleSidebar();
-                    }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded transition-all ${
-                      active === link.name
-                        ? "bg-[#7A59FF] text-white"
-                        : "bg-[#4c2d80] hover:bg-[#5d37a2] text-white/80"
-                    }`}
-                  >
-                    {link.icon}
-                    <span className="text-sm">{link.name}</span>
-                  </Link>
-                ))}
-              </nav>
-              <Discount />
-              
-              <aside className="space-y-6">
-                <FriendsOnline />
-                <RecentlyPlayed />
-              </aside>
-            </aside>
-          </div>
-        )}
       </div>
     </>
   );

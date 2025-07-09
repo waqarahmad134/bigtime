@@ -39,3 +39,11 @@ body {
   -webkit-box-shadow: 4px 1px 39px -16px rgba(0, 0, 0, 0.94) inset;
   -moz-box-shadow: 4px 1px 39px -16px rgba(0, 0, 0, 0.94) inset;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
