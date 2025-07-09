@@ -1,7 +1,6 @@
 import { Bebas_Neue, Poppins } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider, useSidebar } from "@/context/SidebarContext";
-import LayoutContent from "@/components/LayoutContent";
+import LayoutWrapper from "@/components/LayoutWrapper"; // <-- new wrapper
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -24,9 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${bebasNeue.variable} ${poppins.variable} antialiased`}>
-        <SidebarProvider>
-          <LayoutContent>{children}</LayoutContent>
-        </SidebarProvider>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );

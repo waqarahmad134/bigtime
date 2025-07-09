@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-[#0A0F1C] text-white font-sans">
+      <body className="bg-[#0A0F1C] text-white">
         <div className="flex min-h-screen">
           <div className="relative flex w-full">
             {/* Background Images */}

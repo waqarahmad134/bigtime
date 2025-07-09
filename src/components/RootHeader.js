@@ -1,19 +1,10 @@
 "use client";
 import {
-  Home,
-  User,
-  Trophy,
-  Wallet,
-  Gift,
-  Sparkles,
   Settings,
-  HelpCircle,
-  Gamepad2,
-  LogIn,
-  ShoppingCart,
   Search,
   Bell,
 } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import Logo from "@/assets/Images/Logo2.png";
@@ -39,7 +30,9 @@ export default function RootHeader() {
           </div>
 
           <div className="ml-5">
+          <Link href="/home">
             <Image src={Logo} alt="Big Time Logo" width={42} />
+          </Link>
           </div>
 
           {/* Search Bar */}

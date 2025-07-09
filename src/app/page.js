@@ -2,7 +2,6 @@
 import Image from "next/image";
 import bgImage from "@/assets/Images/BackgroundImage.png";
 import Logo from "@/assets/Images/Logo.png";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -12,15 +11,14 @@ export default function Home() {
   //   router.push("/home");
   // }, []);
   return (
-    <div className="relative min-h-screen flex flex-col" >
-      {/* Background image fills the viewport */}
+    <div className="relative min-h-screen flex flex-col">
       <div className="before:content-[''] before:absolute before:inset-0 before:bg-[#160430]/60 before:z-[-5]">
-      <Image
-        src={bgImage}
-        alt="Background"
-        fill
-        className="object-cover pointer-events-none select-none -z-10"
-        priority
+        <Image
+          src={bgImage}
+          alt="Background"
+          fill
+          className="object-cover pointer-events-none select-none -z-10"
+          priority
         />
       </div>
 
