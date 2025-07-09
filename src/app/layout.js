@@ -21,10 +21,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${bebasNeue.variable} ${poppins.variable} antialiased`}
-      >
-        {/* MAIN CONTENT */}
+      <body className={`${bebasNeue.variable} ${poppins.variable} antialiased`}>
         <main>{children}</main>
       </body>
     </html>

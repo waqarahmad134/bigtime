@@ -11,9 +11,18 @@ import {
   HelpCircle,
   Gamepad2,
   LogIn,
+  ShoppingCart,
+  Search,
+  Bell,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
+import Discount from "./discount";
+import FriendsOnline from "./friendsOnline";
+import RecentlyPlayed from "./recentlyPlayed";
+import Logo from "@/assets/Images/Logo2.png";
+
 
 export default function RootHeader() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,19 +34,17 @@ export default function RootHeader() {
 
   const links = [
     { name: "Home", icon: <Home size={16} />, href: "/home" },
-    { name: "Profile & Avatar", icon: <User size={16} />, href: "/profile" },
+    { name: "Profile & Avatar", icon: <User size={16} />, href: "/profile" }, // Need more revamp
     { name: "leaderboard", icon: <Trophy size={16} />, href: "/leaderboard" },
     { name: "Wallet", icon: <Wallet size={16} />, href: "/wallet" },
     { name: "Referral Program", icon: <Gift size={16} />, href: "/referral" },
     { name: "Sweepstake", icon: <Sparkles size={16} />, href: "/sweepstakes" },
     { name: "Payment", icon: <Wallet size={16} />, href: "/payment" },
     { name: "Rewards", icon: <Sparkles size={16} />, href: "/rewards" },
-    { name: "Tournaments", icon: <Trophy size={16} />, href: "/tournaments" },
-    { name: "Settings", icon: <Settings size={16} />, href: "/settings" },
-    { name: "Help", icon: <HelpCircle size={16} />, href: "/help" },
-    { name: "login", icon: <LogIn size={16} />, href: "/otp" },
+    { name: "Tournaments", icon: <Trophy size={16} />, href: "/tournaments" }, // Need high revamp 
+    { name: "Settings", icon: <Settings size={16} />, href: "/settings" }, //Make screen for this
+    { name: "Shop", icon: <ShoppingCart size={16} />, href: "/shop" }, // Make screen for this
     { name: "login", icon: <LogIn size={16} />, href: "/login" },
-    // { name: "logout", icon: <LogOut size={16} />, href: "/logout" },
   ];
 
   return (
@@ -48,17 +55,20 @@ export default function RootHeader() {
           {/* Hamburger Button OUTSIDE search bar */}
           <button
             onClick={toggleSidebar}
-            className="w-8 h-8 bg-[#7A59FF] rounded flex flex-col items-center justify-center hover:bg-[#5d37a2] transition"
+            className="w-8 h-8 rounded flex flex-col items-center justify-center hover:bg-[#5d37a2] transition"
           >
             {/* Hamburger bars */}
-            <span className="block w-4 h-0.5 bg-white mb-1"></span>
-            <span className="block w-4 h-0.5 bg-white mb-1"></span>
-            <span className="block w-4 h-0.5 bg-white"></span>
+            <span className="block w-6 h-1 rounded-2xl bg-white mb-1"></span>
+            <span className="block w-6 h-1 rounded-2xl bg-white mb-1"></span>
+            <span className="block w-6 h-1 rounded-2xl bg-white"></span>
           </button>
+          <div>
+            <Image src={Logo} alt="Big Time Logo" width={42} />
+          </div>
 
           {/* Search Bar */}
           <div className="flex items-center bg-[#4c2d80] px-3 py-2 rounded-full w-full md:w-72">
-            <span className="text-purple-300 mr-2">🔍</span>
+            <span className="text-purple-300 mr-2"><Search /></span>
             <input
               type="text"
               placeholder="Search"
@@ -70,13 +80,13 @@ export default function RootHeader() {
         </div>
 
         {/* RIGHT GROUP */}
-        <div className="flex items-center gap-2 md:gap-4 ml-auto">
+        <div className="hidden md:flex items-center gap-2 md:gap-4 ml-auto ">
           {/* Action Buttons */}
-          <button className="w-8 h-8 bg-[#4c2d80] rounded flex items-center justify-center hover:bg-[#5d37a2]">
-            <span className="text-white">▢</span>
+          <button className="w-8 h-8 p-5 bg-[#4c2d80] rounded flex items-center justify-center hover:bg-[#5d37a2]">
+            <span className="text-white"><Bell /></span>
           </button>
-          <button className="w-8 h-8 bg-[#4c2d80] rounded flex items-center justify-center hover:bg-[#5d37a2]">
-            <span className="text-white">⚙️</span>
+          <button className="w-8 h-8 p-5 bg-[#4c2d80] rounded flex items-center justify-center hover:bg-[#5d37a2]">
+            <span className="text-white"><Settings /></span>
           </button>
 
           {/* User Profile */}
@@ -125,15 +135,11 @@ export default function RootHeader() {
               ))}
             </nav>
 
-            <div className="mt-6 bg-[#5d37a2] p-4 rounded text-center text-sm">
-              <p className="font-semibold mb-2">50% discount</p>
-              <p className="text-xs text-white/70 mb-3">
-                on the games in the selection!
-              </p>
-              <button className="w-full py-2 rounded bg-white text-[#5d37a2] font-semibold hover:bg-purple-100 transition">
-                Go to library
-              </button>
-            </div>
+            <Discount />
+            <aside className="space-y-6">
+              <FriendsOnline />
+              <RecentlyPlayed />
+            </aside>
           </aside>
         </div>
       )}
