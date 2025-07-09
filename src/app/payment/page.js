@@ -23,7 +23,7 @@ export default function PaymentMethod() {
     // Handle API logic here
   };
   return (
-    <div className="relative min-h-screen flex flex-col pb-10 items-center">
+    <div className="relative">
       {/* Background Images */}
       <Image
         src={bgImageMobile}

@@ -179,7 +179,7 @@ export default function Homes() {
     },
   ];
   return (
-    <div className="relative min-h-screen flex flex-col pb-10 items-center">
+    <div className="relative pb-10 items-center">
       <Image
         src={bgImageWallet}
         alt="Background Desktop"

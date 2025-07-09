@@ -94,8 +94,7 @@ export default function Homes() {
 
   return (
     <>
-      <RootHeader />
-      <div className="relative min-h-screen flex flex-col pb-10 items-center">
+      <div className="relative">
         <Image
           src={bgImageWallet}
           alt="Background Desktop"
@@ -105,9 +104,9 @@ export default function Homes() {
         />
 
         {/* PAGE CONTENT */}
-        <div className="w-full flex-grow flex items-center justify-center">
+        <div className="">
           {/* Your page content goes here */}
-          <div className="w-full min-h-screen bg-transparent text-white p-4">
+          <div className="w-full text-white p-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-3 space-y-8">
                 <div className="relative rounded-lg overflow-hidden">
