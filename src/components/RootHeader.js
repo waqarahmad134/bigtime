@@ -21,7 +21,7 @@ export default function RootHeader() {
           <div className="w-[50px] mx-auto flex items-center justify-center gap-3">
             <button
               onClick={toggleSidebar}
-              className="w-8 h-8 rounded flex flex-col items-center justify-center hover:bg-[#5d37a2] transition"
+              className="w-8 h-8 rounded flex flex-col items-center justify-center hover:bg-[#5d37a2] transition cursor-pointer"
             >
               <span className="block w-6 h-1 rounded-2xl bg-white mb-1"></span>
               <span className="block w-6 h-1 rounded-2xl bg-white mb-1"></span>

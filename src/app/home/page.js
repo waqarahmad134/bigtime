@@ -31,6 +31,24 @@ export default function Homes() {
 
   const actualGames = [
     {
+      title: "Marvel Spiderman 1",
+      price: "$39.00",
+      rating: 4.5,
+      image: spiderman,
+    },
+    {
+      title: "MORTAL KOMBAT 1",
+      price: "$67.00",
+      rating: 4.5,
+      image: mortal,
+    },
+    {
+      title: "FORZA HORIZON 1",
+      price: "$54.00",
+      rating: 4.5,
+      image: forza,
+    },
+    {
       title: "Marvel Spiderman 2",
       price: "$39.00",
       rating: 4.5,
@@ -107,10 +125,10 @@ export default function Homes() {
         <div className="">
           {/* Your page content goes here */}
           <div className="w-full text-white p-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-3 space-y-8">
+            <div className="">
+              <div className="">
                 <div className="relative rounded-lg overflow-hidden">
-                  <Image src={hogwarts} alt="hogwarts" className="min-h-64" />
+                  <Image src={hogwarts} alt="hogwarts" className="min-h-64 w-full" />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                     <h2 className="text-3xl font-bold">HOGWARTS LEGACY</h2>
                     <p className="text-sm mt-1 max-w-lg">
@@ -131,10 +149,10 @@ export default function Homes() {
 
                 <div>
                   <h3 className="text-xl font-bold mb-4">ACTUAL GAMES</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {actualGames.map((game) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-4">
+                    {actualGames.map((game , index) => (
                       <div
-                        key={game.title}
+                        key={game.title+index}
                         className="rounded bg-[#2b0a59] overflow-hidden cursor-pointer"
                         onClick={() => router.push("/gameinfo")}
                       >
@@ -142,7 +160,7 @@ export default function Homes() {
                           <Image
                             src={game.image}
                             alt={game.title}
-                            className="w-full h-48 object-cover"
+                            className="w-full h-48 md:h-48 lg:h-48 xl:h-48 2xl:h-92 object-cover"
                           />
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
                             <h2 className="text-lg font-bold max-w-30 leading-5">

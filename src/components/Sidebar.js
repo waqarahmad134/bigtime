@@ -59,7 +59,7 @@ export default function Sidebar() {
             <div key={idx} className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${friend.color}`}></div>
-                {friend.name}
+                <span className="text-sm">{friend.name}</span>
               </div>
               <span className="w-2 h-2 bg-green-400 rounded-full"></span>
             </div>

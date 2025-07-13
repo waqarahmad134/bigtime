@@ -50,7 +50,6 @@ export default function settings() {
   });
   return (
     <>
-      <RootHeader />
       <div className="relative min-h-screen flex flex-col p-10">
         <ThemeBackground />
 

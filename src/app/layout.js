@@ -1,6 +1,6 @@
 import { Bebas_Neue, Poppins } from "next/font/google";
 import "./globals.css";
-import LayoutWrapper from "@/components/LayoutWrapper"; // <-- new wrapper
+import LayoutWrapper from "@/components/LayoutWrapper"; 
 
 const bebasNeue = Bebas_Neue({
   weight: "400",

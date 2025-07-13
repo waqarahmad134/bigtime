@@ -18,7 +18,9 @@ export default function LayoutContent({ children }) {
             isSidebarOpen ? "w-[calc(100%-256px)]" : "w-[calc(100%-80px)]"
           }`}
         >
+          <>
           {children}
+          </>
         </div>
       </main>
     </>
