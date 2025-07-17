@@ -1,18 +1,49 @@
-"use client";
-import {
-  Settings,
-  Search,
-  Bell,
-} from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
-import Logo from "@/assets/Images/Logo2.png";
-import { useSidebar } from "@/context/SidebarContext";
+"use client"
+import { Settings, Search, Bell, LogOut } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
+import { useState } from "react"
+import Logo from "@/assets/Images/Logo2.png"
+import { useSidebar } from "@/context/SidebarContext"
+import { toast } from "react-hot-toast"
+
 
 export default function RootHeader() {
-  const { isSidebarOpen, toggleSidebar } = useSidebar();
-  const [searchQuery, setSearchQuery] = useState("");
+  const { isSidebarOpen, toggleSidebar } = useSidebar()
+  const [searchQuery, setSearchQuery] = useState("")
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+
+  const logOutFunc = async () => {
+    try {
+      const token = localStorage.getItem("accessToken")
+      const refresh = localStorage.getItem("refreshToken"); // get refresh from localStorage
+
+      const response = await fetch(`${API_BASE_URL}/auth/logout/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          refresh,
+        }),
+      })
+
+      if (response.ok) {
+        toast.success("✅ Successfully logged out!");
+        localStorage.clear();
+        window.location.href = "/login"
+      } else {
+        const errorData = await response.json()
+        toast.error(`Something went wrong! ${Object.values(errorData).join(', ')}`);
+        console.warn("❌ Logout failed:", errorData)
+      }
+    } catch (err) {
+      toast.error("Something went wrong ,err  ");
+      console.error("❌ Logout error:", err)
+    }
+  }
+
   return (
     <div>
       <header className="fixed top-0 z-99 w-full px-4 py-3 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 bg-[#2b0a59]">
@@ -30,9 +61,9 @@ export default function RootHeader() {
           </div>
 
           <div className="ml-5">
-          <Link href="/home">
-            <Image src={Logo} alt="Big Time Logo" width={42} />
-          </Link>
+            <Link href="/home">
+              <Image src={Logo} alt="Big Time Logo" width={42} />
+            </Link>
           </div>
 
           {/* Search Bar */}
@@ -58,9 +89,20 @@ export default function RootHeader() {
               <Bell />
             </span>
           </button>
-          <button className="w-8 h-8 p-5 bg-[#4c2d80] rounded flex items-center justify-center hover:bg-[#5d37a2]">
+          <Link
+            href={"/settings"}
+            className="w-8 h-8 p-5 bg-[#4c2d80] rounded flex items-center justify-center hover:bg-[#5d37a2]"
+          >
             <span className="text-white">
               <Settings />
+            </span>
+          </Link>
+          <button
+            onClick={logOutFunc}
+            className="cursor-pointer w-8 h-8 p-5 bg-[#4c2d80] rounded flex items-center justify-center hover:bg-[#5d37a2]"
+          >
+            <span className="text-white">
+              <LogOut />
             </span>
           </button>
 
@@ -70,11 +112,13 @@ export default function RootHeader() {
               QS
             </div>
             <div className="hidden sm:block text-white text-sm leading-tight">
-              <p className="font-medium">QuantumSpectra55</p>
+              <p className="font-medium capitalize">
+                {localStorage.getItem("role")}
+              </p>
             </div>
           </div>
         </div>
       </header>
     </div>
-  );
+  )
 }

@@ -10,6 +10,8 @@ import Link from "next/link";
 import { Lock, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function Home() {
@@ -37,12 +39,15 @@ export default function Home() {
       const data = await response.json();
 
       if (response.ok) {
+        toast.success("Logged In successfully!");
         console.log("Login successful", data);
         localStorage.setItem("accessToken", data.access);
         localStorage.setItem("refreshToken", data.refresh);
+        localStorage.setItem("role", data.role);
         // store token or user data if needed
         router.push("/home"); // or wherever
       } else {
+        toast.error("Something went wrong!");
         alert(data?.message || "Invalid credentials");
       }
     } catch (error) {

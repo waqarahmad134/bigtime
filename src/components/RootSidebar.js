@@ -28,13 +28,13 @@ export default function RootSidebar() {
     { name: "Wallet", icon: Wallet, href: "/wallet" },
     { name: "Referral Program", icon: Gift, href: "/referral" },
     { name: "Sweepstake", icon: Sparkles, href: "/sweepstakes" },
-    // { name: "Payment", icon: Wallet, href: "/payment" },
     { name: "Shop", icon: ShoppingCart, href: "/shop" }, // Make screen for this
     { name: "leaderboard", icon: Trophy, href: "/leaderboard" },
     { name: "Rewards", icon: Sparkles, href: "/rewards" },
-    // { name: "Settings", icon: Settings, href: "/settings" }, //Make screen for this // Done just make api call for this
-    // { name: "login", icon: LogIn, href: "/login" },
   ];
+  // { name: "Payment", icon: Wallet, href: "/payment" },
+  // { name: "Settings", icon: Settings, href: "/settings" }, //Make screen for this // Done just make api call for this
+  // { name: "login", icon: LogIn, href: "/login" },
   return (
     <>
       {isSidebarOpen ? (
