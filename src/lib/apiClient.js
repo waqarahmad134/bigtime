@@ -1,23 +1,24 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://your-api.com";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://167.71.255.240:8000";
 
-// Helper to build full URL with query params
 const buildUrl = (endpoint, params = {}) => {
-  const url = new URL(`${API_BASE_URL}${endpoint}`);
+  let cleanEndpoint = endpoint.endsWith("/") ? endpoint : `${endpoint}/`; 
+  const url = new URL(`${API_BASE_URL}${cleanEndpoint}`);
+
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       url.searchParams.append(key, value);
     }
   });
+
   return url.toString();
 };
 
-// Token getter
+
 const getAuthHeaders = () => {
   const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-// Generic GET request
 export const getApi = async (endpoint, params = {}, customHeaders = {}) => {
   const url = buildUrl(endpoint, params);
   const res = await fetch(url, {
@@ -29,11 +30,19 @@ export const getApi = async (endpoint, params = {}, customHeaders = {}) => {
     },
   });
 
-  if (!res.ok) throw new Error(`GET ${url} failed with status ${res.status}`);
-  return res.json();
+  const json = await res.json();
+
+  if (!res.ok) {
+    const error = new Error(json?.detail || `GET ${url} failed with status ${res.status}`);
+    error.status = res.status;
+    error.detail = json?.detail;
+    throw error;
+  }
+
+  return json;
 };
 
-// Generic POST request
+
 export const postApi = async (endpoint, data = {}, isFormData = false, customHeaders = {}) => {
   const body = isFormData ? data : JSON.stringify(data);
 
@@ -51,7 +60,6 @@ export const postApi = async (endpoint, data = {}, isFormData = false, customHea
   return res.json();
 };
 
-// Generic PUT request
 export const putApi = async (endpoint, data = {}, isFormData = false, customHeaders = {}) => {
   const body = isFormData ? data : JSON.stringify(data);
 

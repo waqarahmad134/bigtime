@@ -1,3 +1,9 @@
+"use client"
+
+import { getApi } from "@/lib/apiClient"
+import { useEffect, useState } from "react"
+import { toast } from "react-hot-toast"
+
 const UserRow = ({ name, email, status, joinDate, games }) => (
   <>
     <tr className="hover:bg-[#7a59ff8c] border-b-[1px] border-[#374151]">
@@ -27,6 +33,26 @@ const UserRow = ({ name, email, status, joinDate, games }) => (
 )
 
 export default function AdminIssuesPage() {
+  const [issueData, setIssueData] = useState(null)
+
+  const fetchIssues = async () => {
+    try {
+      const data = await getApi("/issues", {
+        priority: 10,
+        status: true,
+        limit: 10,
+        offset: 0,
+      })
+      setIssueData(data)
+    } catch (error) {
+      console.log("API error:", error)
+      toast.error(error?.detail || error.message || "Something went wrong!")
+    }
+  }
+
+  useEffect(() => {
+    fetchIssues()
+  }, [])
   return (
     <>
       <div className="p-8">
@@ -54,6 +80,29 @@ export default function AdminIssuesPage() {
               </tr>
             </thead>
             <tbody>
+              {issueData?.results?.map((issue, index) => (
+                <UserRow
+                  key={index}
+                  name={issue.title}
+                  email={issue.priority}
+                  status={issue.status}
+                  games={issue.assigned_to}
+                  joinDate={new Date(issue.created_at).toLocaleDateString()}
+                />
+              ))}
+
+              {!issueData?.results?.length && (
+                <tr>
+                  <td colSpan="6" className="text-center py-4 text-gray-300">
+                    No issues found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+
+            {/* Dummy  */}
+            <tbody>
+              Dummy |
               <UserRow
                 name="Login system bug"
                 email="high"
