@@ -20,7 +20,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Check if already logged in
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -60,7 +59,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex">
+    <div className="relative min-h-screen flex flex-col md:flex-row">
       {/* Background */}
       <div className="before:content-[''] before:absolute before:inset-0 before:bg-[#160430]/60 before:z-[-5]">
         <Image src={bgImageMobile} alt="Background Mobile" fill className="object-fill pointer-events-none select-none -z-10 block md:hidden" priority />
@@ -68,7 +67,7 @@ export default function LoginPage() {
       </div>
 
       {/* Left Side */}
-      <div className="font-bold w-1/2 flex flex-col justify-center px-16 md:flex">
+      <div className="font-bold w-full md:w-1/2 flex flex-col justify-center px-8 md:px-16 mt-20">
         <div className="mb-8 absolute top-5 left-5">
           <Image src={Logo} alt="Big Time Logo" width={96} />
         </div>

@@ -148,8 +148,8 @@ export default function Homes() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold mb-4">ACTUAL GAMES</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-4">
+                  <h3 className="text-xl font-bold my-4">ACTUAL GAMES</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
                     {actualGames.map((game , index) => (
                       <div
                         key={game.title+index}
@@ -160,15 +160,15 @@ export default function Homes() {
                           <Image
                             src={game.image}
                             alt={game.title}
-                            className="w-full h-48 md:h-48 lg:h-48 xl:h-48 2xl:h-92 object-cover"
+                            className="w-full h-20 md:h-48 lg:h-48 xl:h-48 2xl:h-64 3xl:h-92 object-cover"
                           />
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                            <h2 className="text-lg font-bold max-w-30 leading-5">
+                            <h2 className="text-sm font-bold max-w-30 leading-5">
                               {game.title}
                             </h2>
                           </div>
                         </div>
-                        <div className="flex justify-between items-center text-sm bg-[#9F2427] p-2">
+                        <div className="flex justify-between items-center text-sm md:text-base bg-[#9F2427] p-1 md:p-2">
                           <span>{game.price}</span>
                           <span className="flex items-center gap-1">
                             <span className="text-white">★</span> {game.rating}
@@ -180,8 +180,8 @@ export default function Homes() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold mb-4">POPULAR GAMES</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <h3 className="text-xl font-bold my-4">POPULAR GAMES</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
                     {popularGames.map((game) => (
                       <div
                         key={game.title}
@@ -192,7 +192,7 @@ export default function Homes() {
                           <Image
                             src={game.image}
                             alt={game.title}
-                            className="w-full h-36"
+                            className="w-full h-20 md:h-48 lg:h-48 xl:h-48 2xl:h-64 3xl:h-92 object-cover"
                           />
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
                             <h2 className="text-lg font-bold max-w-36 leading-5">
@@ -200,7 +200,7 @@ export default function Homes() {
                             </h2>
                           </div>
                         </div>
-                        <div className="flex justify-between items-center text-sm bg-[#9F2427] p-2">
+                        <div className="flex justify-between items-center text-sm md:text-base bg-[#9F2427] p-1 md:p-2">
                           <span>{game.price}</span>
                           <span className="flex items-center gap-1">
                             <span className="text-white">★</span> {game.rating}
@@ -211,8 +211,8 @@ export default function Homes() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold mb-4">MOST POPULAR GAMES</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <h3 className="text-xl font-bold my-4">MOST POPULAR GAMES</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
                     {mostPopularGames.map((game) => (
                       <div
                         key={game.title}
@@ -223,7 +223,7 @@ export default function Homes() {
                           <Image
                             src={game.image}
                             alt={game.title}
-                            className="w-full h-36"
+                            className="w-full h-20 md:h-48 lg:h-48 xl:h-48 2xl:h-64 3xl:h-92 object-cover"
                           />
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
                             <h2 className="text-lg font-bold max-w-36 leading-5">
