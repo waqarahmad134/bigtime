@@ -12,9 +12,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import Discount from "./Discount";
-import FriendsOnline from "./FriendsOnline";
-import RecentlyPlayed from "./recentlyPlayed";
+import Discount from "@/components/Discount";
+import FriendsOnline from "@/components/FriendsOnline";
+import RecentlyPlayed from "@/components/recentlyPlayed";
 import { useSidebar } from "@/context/SidebarContext";
 
 export default function RootSidebar() {
