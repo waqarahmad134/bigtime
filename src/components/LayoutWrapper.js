@@ -7,7 +7,7 @@ export default function LayoutWrapper({ children }) {
   const pathname = usePathname()
   const excludedPrefixes = ["/", "/login", "/otp", "/signup"]
   const isExcluded =
-    excludedPrefixes.includes(pathname) || pathname.startsWith("/admin")
+    excludedPrefixes.includes(pathname) || pathname.startsWith("/bigtimeadmin")
 
   if (isExcluded) {
     return <>{children}</>
