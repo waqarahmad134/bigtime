@@ -28,43 +28,43 @@ export default function AdminLayout({ children }) {
               Dashboard
             </Link>
             <Link
-              href="/admin/users"
+              href="/bigtimeadmin/users"
               className="block py-2 px-4 hover:bg-gray-700 rounded mb-2"
             >
               Users
             </Link>
             <Link
-              href="/admin/moderation"
+              href="/bigtimeadmin/moderation"
               className="block py-2 px-4 hover:bg-gray-700 rounded mb-2"
             >
               Moderation
             </Link>
             <Link
-              href="/admin/issues"
+              href="/bigtimeadmin/issues"
               className="block py-2 px-4 hover:bg-gray-700 rounded mb-2"
             >
               Issues
             </Link>
             <Link
-              href="/admin/content"
+              href="/bigtimeadmin/content"
               className="block py-2 px-4 hover:bg-gray-700 rounded mb-2"
             >
               Content
             </Link>
-            <Link
-              href="/admi/rewards"
+            {/* <Link
+              href="/bigtimeadmin/rewards"
               className="block py-2 px-4 hover:bg-gray-700 rounded mb-2"
             >
               Rewards & Achievements
-            </Link>
+            </Link> */}
             <Link
-              href="/admin/developer-portal"
+              href="/bigtimeadmin/developer-portal"
               className="block py-2 px-4 hover:bg-gray-700 rounded"
             >
               Developer Portal
             </Link>
             {/* <Link
-              href="/admin/settings"
+              href="/bigtimeadmin/settings"
               className="block py-2 px-4 hover:bg-gray-700 rounded"
             >
               Settings
