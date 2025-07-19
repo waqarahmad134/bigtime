@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function recentlyPlayed() {
+export default function RecentlyPlayed() {
   const recentlyPlayed = [
     {
       name: "Hitman World of Assassination",

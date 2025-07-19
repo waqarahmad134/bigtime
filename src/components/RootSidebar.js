@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import {
   Home,
   User,
@@ -9,17 +9,17 @@ import {
   Settings,
   LogIn,
   ShoppingCart,
-} from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import Discount from "@/components/Discount";
-import FriendsOnline from "@/components/FriendsOnline";
-import RecentlyPlayed from "@/components/recentlyPlayed";
-import { useSidebar } from "@/context/SidebarContext";
+} from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import Discount from "@/components/Discount"
+import FriendsOnline from "@/components/FriendsOnline"
+import RecentlyPlayed from "@/components/RecentlyPlayed"
+import { useSidebar } from "@/context/SidebarContext"
 
 export default function RootSidebar() {
-  const { isSidebarOpen } = useSidebar();
-  const [active, setActive] = useState("Home");
+  const { isSidebarOpen } = useSidebar()
+  const [active, setActive] = useState("Home")
 
   const links = [
     { name: "Home", icon: Home, href: "/home" },
@@ -31,7 +31,7 @@ export default function RootSidebar() {
     { name: "Shop", icon: ShoppingCart, href: "/shop" }, // Make screen for this
     { name: "leaderboard", icon: Trophy, href: "/leaderboard" },
     { name: "Rewards", icon: Sparkles, href: "/rewards" },
-  ];
+  ]
   // { name: "Payment", icon: Wallet, href: "/payment" },
   // { name: "Settings", icon: Settings, href: "/settings" }, //Make screen for this // Done just make api call for this
   // { name: "login", icon: LogIn, href: "/login" },
@@ -46,7 +46,7 @@ export default function RootSidebar() {
                   key={name}
                   href={href}
                   onClick={() => {
-                    setActive(name);
+                    setActive(name)
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded transition-all ${
                     active === name
@@ -70,10 +70,10 @@ export default function RootSidebar() {
             <nav className="flex flex-col gap-2 flex-grow overflow-y-auto">
               {links.map(({ name, href, icon: Icon }) => (
                 <Link
-                  key={name+"mobile"}
+                  key={name + "mobile"}
                   href={href}
                   onClick={() => {
-                    setActive(name);
+                    setActive(name)
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded transition-all ${
                     active === name
@@ -89,5 +89,5 @@ export default function RootSidebar() {
         </div>
       )}
     </>
-  );
+  )
 }

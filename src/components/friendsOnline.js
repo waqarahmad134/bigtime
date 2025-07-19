@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function friendsOnline() {
+export default function FriendsOnline() {
     
 const friends = [
     { name: "CrimsonTiger67", game: "Resident Evil 4" },

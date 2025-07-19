@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function discount() {
+export default function Discount() {
   return (
     <>
       <div className="mt-6 bg-[#5d37a2] p-4 rounded text-center text-sm">
