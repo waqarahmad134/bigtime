@@ -21,7 +21,9 @@ export default function Leaderboard() {
   const fetchLeaderboard = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem("accessToken")
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken") 
+      }
       const response = await fetch(
         `${API_BASE_URL}/leaderboard/?limit=5&period=${activeTab}&offset=0`,
         {

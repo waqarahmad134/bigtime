@@ -4,7 +4,7 @@ import filterIcon from "@/assets/Images/filter.png";
 import { FiSearch } from "react-icons/fi";
 import ThemeBackground from "@/components/ThemeBackground";
 import RootHeader from "@/components/RootHeader";
-import Card from "@/components/Settings/Card";
+import Card from "@/components/settings/Card";
 import { useState } from "react";
 import ThemeBtn from "@/utilities/ThemeBtn";
 

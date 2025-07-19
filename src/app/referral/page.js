@@ -82,7 +82,11 @@ export default function Leaderboard() {
   }
   const getReferralCode = async () => {
     try {
-      const token = localStorage.getItem("accessToken")
+      let token
+
+      if (typeof window !== "undefined") {
+        token = localStorage.getItem("accessToken") 
+      }
       const codeResponse = await fetch(`${API_BASE_URL}/referral/code`, {
         method: "GET",
         headers: {
@@ -123,7 +127,10 @@ export default function Leaderboard() {
 
   const getReferrals = async () => {
     try {
-      const token = localStorage.getItem("accessToken")
+      let token
+      if (typeof window !== "undefined") {
+        token = localStorage.getItem("accessToken") 
+      }
       const response = await fetch(`${API_BASE_URL}/referral/referred/`, {
         method: "GET",
         headers: {

@@ -1,8 +1,8 @@
 "use client";
 
-import RootHeader from "./RootHeader";
+import RootHeader from "@/components/RootHeader";
 import { useSidebar } from "@/context/SidebarContext";
-import RootSidebar from "./RootSidebar";
+import RootSidebar from "@/components/RootSidebar";
 
 
 export default function LayoutContent({ children }) {

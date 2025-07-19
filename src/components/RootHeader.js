@@ -7,7 +7,6 @@ import Logo from "@/assets/Images/Logo2.png"
 import { useSidebar } from "@/context/SidebarContext"
 import { toast } from "react-hot-toast"
 
-
 export default function RootHeader() {
   const { isSidebarOpen, toggleSidebar } = useSidebar()
   const [searchQuery, setSearchQuery] = useState("")
@@ -15,9 +14,12 @@ export default function RootHeader() {
 
   const logOutFunc = async () => {
     try {
-      const token = localStorage.getItem("accessToken")
-      const refresh = localStorage.getItem("refreshToken"); // get refresh from localStorage
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken")
+        const refresh = localStorage.getItem("refreshToken") 
+      }
 
+      
       const response = await fetch(`${API_BASE_URL}/auth/logout/`, {
         method: "POST",
         headers: {
@@ -30,16 +32,18 @@ export default function RootHeader() {
       })
 
       if (response.ok) {
-        toast.success("✅ Successfully logged out!");
-        localStorage.clear();
+        toast.success("✅ Successfully logged out!")
+        localStorage.clear()
         window.location.href = "/login"
       } else {
         const errorData = await response.json()
-        toast.error(`Something went wrong! ${Object.values(errorData).join(', ')}`);
+        toast.error(
+          `Something went wrong! ${Object.values(errorData).join(", ")}`,
+        )
         console.warn("❌ Logout failed:", errorData)
       }
     } catch (err) {
-      toast.error("Something went wrong ,err  ");
+      toast.error("Something went wrong ,err  ")
       console.error("❌ Logout error:", err)
     }
   }

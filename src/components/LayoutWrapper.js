@@ -1,7 +1,7 @@
 "use client"
 import { usePathname } from "next/navigation"
 import { SidebarProvider } from "@/context/SidebarContext"
-import LayoutContent from "./LayoutContent"
+import LayoutContent from "@/components/LayoutContent"
 
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname()
