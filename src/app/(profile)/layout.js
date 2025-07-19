@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, isValidElement, cloneElement } from "react"
+import { useEffect, useState } from "react"
 import "../globals.css"
 import Image from "next/image"
 import Header from "@/components/Header"
@@ -8,16 +8,16 @@ import Sidebar from "@/components/Sidebar"
 import avatar from "@/assets/Images/rocketleague.png"
 import bgImageWallet from "@/assets/Images/referralbg.png"
 
-export default function RootLayout({ children }) {
+export default function Layout({ children }) {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   const [profileData, setProfileData] = useState(null)
 
   const fetchProfile = async () => {
     try {
-      let token
-      if (typeof window !== "undefined") {
-        token = localStorage.getItem("accessToken")
-      }
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("accessToken")
+          : null
       const response = await fetch(`${API_BASE_URL}/auth/me/`, {
         method: "GET",
         headers: {
@@ -40,10 +40,10 @@ export default function RootLayout({ children }) {
 
   const getFriends = async () => {
     try {
-      let token
-      if (typeof window !== "undefined") {
-        token = localStorage.getItem("accessToken")
-      }
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("accessToken")
+          : null
       const response = await fetch(`${API_BASE_URL}/friends`, {
         method: "GET",
         headers: {
@@ -105,7 +105,6 @@ export default function RootLayout({ children }) {
             <p className="text-xs text-gray-300">7,500 / 10,000 XP</p>
           </div>
 
-          {/* Quick Stats */}
           <div>
             <h3 className="text-purple-300 text-sm font-semibold mb-1">
               Quick Stats
@@ -126,7 +125,6 @@ export default function RootLayout({ children }) {
             </div>
           </div>
 
-          {/* Friends Online */}
           <div>
             <h3 className="font-semibold text-sm mb-2">
               Friends Online ({friends.length})
@@ -162,17 +160,13 @@ export default function RootLayout({ children }) {
                   >
                     {tab}
                   </button>
-                )
+                ),
               )}
             </div>
           </div>
 
           <main className="p-6 mt-[80px]">
-            {profileData?.username && isValidElement(children) ? (
-              cloneElement(children, { profileData })
-            ) : (
-              <div>Loading...</div>
-            )}
+            {profileData ? children : <div>Loading...</div>}
           </main>
         </div>
       </div>

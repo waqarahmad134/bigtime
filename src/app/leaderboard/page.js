@@ -17,17 +17,18 @@ export default function Leaderboard() {
   const [players, setPlayers] = useState([])
   const [loading, setLoading] = useState(false)
 
-  // Fetch leaderboard data
   const fetchLeaderboard = async () => {
     setLoading(true)
     try {
-      if (typeof window !== "undefined") {
-        const token = localStorage.getItem("accessToken") 
-      }
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("accessToken")
+          : null
+
       const response = await fetch(
         `${API_BASE_URL}/leaderboard/?limit=5&period=${activeTab}&offset=0`,
         {
-          method: "Get",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -36,14 +37,13 @@ export default function Leaderboard() {
       )
 
       if (response.status === 401) {
-        window.location.href = "/login";
         alert("Please Login First")
-        return;
+        window.location.href = "/login"
+        return
       }
 
       const data = await response.json()
-      console.log( data?.leaders)
-
+      console.log(data?.leaders)
       setPlayers(data?.leaders)
     } catch (err) {
       console.error("Leaderboard fetch error:", err)
@@ -60,8 +60,12 @@ export default function Leaderboard() {
   // Filter players based on search term
   const filteredPlayers = players.filter(
     (player) =>
-      player?.user__username?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
-      player?.user__username?.toLowerCase()?.includes(searchTerm?.toLowerCase()),
+      player?.user__username
+        ?.toLowerCase()
+        ?.includes(searchTerm?.toLowerCase()) ||
+      player?.user__username
+        ?.toLowerCase()
+        ?.includes(searchTerm?.toLowerCase()),
   )
 
   return (
@@ -121,7 +125,7 @@ export default function Leaderboard() {
           {/* Player List */}
           <div className="space-y-3 border-2 border-[#581c87] rounded-xl p-4">
             <h2 className="font-semibold text-xl capitalize">
-            {activeTab} Top Players
+              {activeTab} Top Players
             </h2>
             {loading ? (
               <p className="text-center text-sm text-white/50">Loading...</p>
@@ -149,11 +153,15 @@ export default function Leaderboard() {
                           : "text-white/80"
                       }`}
                     >
-                      {index + 1}. 
+                      {index + 1}.
                     </span>
                     <div>
-                      <p className="text-sm font-medium">{player.user__username}</p>
-                      <p className="text-xs text-white/50">@{player.user__username}</p>
+                      <p className="text-sm font-medium">
+                        {player.user__username}
+                      </p>
+                      <p className="text-xs text-white/50">
+                        @{player.user__username}
+                      </p>
                     </div>
                     {player.you && (
                       <span className="ml-2 px-2 py-0.5 bg-pink-600 text-xs rounded-full">
@@ -162,7 +170,7 @@ export default function Leaderboard() {
                     )}
                   </div>
                   <p className="font-bold text-right">
-                    {parseFloat(player.rank).toFixed(2)}
+                    {parseFloat(player.rank || 0).toFixed(2)}
                   </p>
                 </div>
               ))
