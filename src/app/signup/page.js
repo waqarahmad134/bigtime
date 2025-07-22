@@ -14,17 +14,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 export default function signup() {
   const pathname = usePathname()
-
-  useEffect(() => {
-    const segments = pathname.split("/")
-    const code = segments[1]
-    if (code) {
-      setFormData((prev) => ({ ...prev, referral_code: code }))
-      setReferralLocked(true)
-    }
-  }, [pathname])
-  
   const router = useRouter()
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -34,6 +25,16 @@ export default function signup() {
     confirmPassword: "",
     referral_code: "",
   })
+  const [referralLocked, setReferralLocked] = useState(false)
+
+  useEffect(() => {
+    const segments = pathname.split("/")
+    const code = segments[1]
+    if (code) {
+      setFormData((prev) => ({ ...prev, referral_code: code }))
+      setReferralLocked(true)
+    }
+  }, [pathname])
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
