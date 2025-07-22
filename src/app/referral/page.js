@@ -52,6 +52,7 @@ const referrals = [
 export default function Leaderboard() {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   const [referralCode, setReferralCode] = useState("")
+  const [referralList , setReferralList] = ([])
   const [refCode, setRefCode] = useState("")
   const [activeTab, setActiveTab] = useState("All")
   const [copied, setCopied] = useState(false)
@@ -63,10 +64,7 @@ export default function Leaderboard() {
       ? referrals
       : referrals.filter((r) => r.status === activeTab)
 
-  const totalRewards = referrals
-
-    .filter((r) => r.status === "Completed")
-    .reduce((sum, r) => sum + (r.reward || 0), 0)
+  const totalRewards = referrals.filter((r) => r.status === "Completed").reduce((sum, r) => sum + (r.reward || 0), 0)
 
   // const copyToClipboard = () => {
   //   const textToCopy = inputRef.current?.value
@@ -181,6 +179,8 @@ export default function Leaderboard() {
       })
 
       const data = await response.json()
+      setReferralList(data)
+      console.log("🚀 ~ getReferrals ~ data:", data)
     } catch (err) {
       console.error("Leaderboard fetch error:", err)
     } finally {
@@ -229,9 +229,9 @@ export default function Leaderboard() {
               Invite friends and earn rewards together
             </p>
           </div>
-          <button className="bg-gradient-to-r from-[#7F5AF0] to-[#9D4EDD] text-white font-semibold rounded-lg px-4 py-2 shadow-md transition hover:opacity-90 w-full md:w-auto">
+          {/* <button className="bg-gradient-to-r from-[#7F5AF0] to-[#9D4EDD] text-white font-semibold rounded-lg px-4 py-2 shadow-md transition hover:opacity-90 w-full md:w-auto">
             View Rewards
-          </button>
+          </button> */}
         </div>
         <div className="bg-[#1F1339] text-white rounded-xl p-4 md:p-6 space-y-4 w-full">
           {/* Heading */}
@@ -308,7 +308,7 @@ export default function Leaderboard() {
               <span className="font-semibold text-white">Bonus:</span> Both you
               and your friend get 100 tokens when they join
             </p>
-            <button className="flex items-center gap-1 bg-gradient-to-r from-[#7F5AF0] to-[#9D4EDD] text-white text-sm font-semibold rounded-lg px-4 py-2 shadow-md transition hover:opacity-90">
+            <button className="cursor-pointer flex items-center gap-1 bg-gradient-to-r from-[#7F5AF0] to-[#9D4EDD] text-white text-sm font-semibold rounded-lg px-4 py-2 shadow-md transition hover:opacity-90">
               <FaLink size={14} />
               Share Referral
             </button>

@@ -12,7 +12,7 @@ import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
-export default function signup() {
+export default function signup({ referralCode = "" }) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -28,13 +28,14 @@ export default function signup() {
   const [referralLocked, setReferralLocked] = useState(false)
 
   useEffect(() => {
-    const segments = pathname.split("/")
-    const code = segments[1]
-    if (code) {
-      setFormData((prev) => ({ ...prev, referral_code: code }))
+    if (referralCode) {
+      setFormData((prev) => ({
+        ...prev,
+        referral_code: referralCode,
+      }))
       setReferralLocked(true)
     }
-  }, [pathname])
+  }, [referralCode])
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
