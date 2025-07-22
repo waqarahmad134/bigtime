@@ -8,7 +8,7 @@ import Logo from "@/assets/Images/Logo.png"
 import { FaGoogle, FaFacebookF } from "react-icons/fa"
 import Link from "next/link"
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePathname, useRouter } from "next/navigation"
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
