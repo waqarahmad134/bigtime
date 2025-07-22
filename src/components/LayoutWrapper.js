@@ -5,7 +5,7 @@ import LayoutContent from "@/components/LayoutContent"
 
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname()
-  const excludedPrefixes = ["/", "/login", "/otp", "/signup"]
+  const excludedPrefixes = ["/", "/login", "/otp", "/signup" , "/gameinfo"]
   const isExcluded =
     excludedPrefixes.includes(pathname) || pathname.startsWith("/bigtimeadmin")
 
