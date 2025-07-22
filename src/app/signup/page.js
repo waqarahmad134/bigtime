@@ -19,6 +19,7 @@ export default function signup({ referralCode = "" }) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    username: "",
     email: "",
     phoneNumber: "",
     password: "",
@@ -58,7 +59,9 @@ export default function signup({ referralCode = "" }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: formData.firstName + formData.lastName,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          username: formData.username,
           email: formData.email,
           password: formData.password,
           confirm_password: formData.confirmPassword,
@@ -146,8 +149,21 @@ export default function signup({ referralCode = "" }) {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-24">
+                <div>
+                  <label className="block text-white text-sm font-semibold mb-2">
+                    UserName
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      placeholder="username"
+                      className="w-full bg-[#261046] border-2 border-white/20 rounded-lg px-10 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-blue-300 "
+                    />
+                  </div>
+                </div>
                 <div>
                   <label className="block text-white text-sm font-semibold mb-2">
                     Email address
@@ -181,9 +197,7 @@ export default function signup({ referralCode = "" }) {
                     />
                   </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-24">
                 <div>
                   <label className="block text-white text-sm font-semibold mb-2">
                     Password
@@ -241,9 +255,7 @@ export default function signup({ referralCode = "" }) {
                     </button>
                   </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 gap-5 md:gap-24">
                 <div>
                   <label className="block text-white text-sm font-semibold mb-2">
                     Referral Code
@@ -263,7 +275,6 @@ export default function signup({ referralCode = "" }) {
                   </div>
                 </div>
               </div>
-
               {/* Sign Up Button */}
               <div className="flex items-center justify-center">
                 <button

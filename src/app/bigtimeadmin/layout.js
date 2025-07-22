@@ -19,6 +19,12 @@ export default function AdminLayout({ children }) {
       </div>
       <div className="min-h-screen text-white flex">
         <div className="fixed w-64 h-screen bg-[#210c43a8] p-4">
+          <Link
+            href="/home"
+            className="inline-block px-4 py-2 mb-4 w-full text-white bg-[#4c2d80] rounded hover:bg-[#5d37a2] transition"
+          >
+            Visit Big Time Universe
+          </Link>
           <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
           <nav>
             <Link

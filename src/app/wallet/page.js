@@ -1,14 +1,18 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
-import { FiRefreshCw, FiSearch } from "react-icons/fi";
-import { BsArrowDownCircle, BsArrowUpCircle } from "react-icons/bs";
-import Image from "next/image";
+import React, { useEffect, useState } from "react"
+import Image from "next/image"
+import { getApi } from "@/lib/apiClient"
+import toast from "react-hot-toast"
+import { useRouter } from "next/navigation";
 
-import bgImageMobile from "@/assets/Images/mobileloginbgimg.png";
-import bgImageWallet from "@/assets/Images/referralbg.png";
-import tokkenimg from "@/assets/Images/tokkenimg.png";
-import filterIcon from "@/assets/Images/filter.png";
+
+import { FiRefreshCw, FiSearch } from "react-icons/fi"
+import { BsArrowDownCircle, BsArrowUpCircle } from "react-icons/bs"
+import bgImageMobile from "@/assets/Images/mobileloginbgimg.png"
+import bgImageWallet from "@/assets/Images/referralbg.png"
+import tokkenimg from "@/assets/Images/tokkenimg.png"
+import filterIcon from "@/assets/Images/filter.png"
 
 const transactions = [
   {
@@ -55,11 +59,32 @@ const transactions = [
     changeColor: "text-green-400",
     date: "6/22/25",
   },
-];
+]
 
 export default function TokenWalletPage() {
-  const [activeTab, setActiveTab] = useState("Send");
-  const tabs = ["Send", "Buy", "Refresh"];
+  const router = useRouter();
+
+  const [walletBalance, setWalletBalance] = useState(null)
+  const fetchWalletBalance = async () => {
+    try {
+      const data = await getApi("/wallet/balance/")
+      console.log("🚀 ~ fetchWalletBalance ~ data:", data)
+      setWalletBalance(data || [])
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.detail ||
+          error.message ||
+          "Failed to fetch flagged reports.",
+      )
+    }
+  }
+
+  useEffect(() => {
+    fetchWalletBalance()
+  }, [])
+
+  const [activeTab, setActiveTab] = useState("transfer")
+  const tabs = ["transfer", "Buy"]
 
   return (
     <div className="relative min-h-screen flex flex-col pb-10">
@@ -101,9 +126,8 @@ export default function TokenWalletPage() {
             </h2>
             <div className="flex flex-col items-start sm:items-end">
               <span className="text-2xl sm:text-3xl font-semibold text-[#FFB800]">
-                9,753.00
+                {walletBalance?.balance}
               </span>
-              <span className="mt-1 text-sm text-green-400">+2.3% (24h)</span>
             </div>
           </div>
         </div>
@@ -114,14 +138,17 @@ export default function TokenWalletPage() {
             {tabs.map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`whitespace-nowrap px-6 py-2 rounded-full transition-colors duration-200 ${
+                onClick={() => {
+                  setActiveTab(tab);
+                  router.push("/payment");
+                }}
+                className={`whitespace-nowrap capitalize px-6 py-2 rounded-lg cursor-pointer transition-colors duration-200 w-full ${
                   activeTab === tab
                     ? "bg-[#7A59FF]"
                     : "hover:bg-[#7A59FF] bg-[#3f1d6a]"
                 }`}
               >
-                {tab}
+                {tab} Tokens
               </button>
             ))}
           </div>
@@ -176,5 +203,5 @@ export default function TokenWalletPage() {
         </section>
       </div>
     </div>
-  );
+  )
 }

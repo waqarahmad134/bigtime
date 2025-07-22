@@ -40,7 +40,7 @@ export default function PaymentMethod() {
         priority
       />
 
-      <div className="bg-white/10 backdrop-blur-md  rounded-xl shadow-xl max-w-4xl w-full px-6 md:px-24 py-6 space-y-6 mt-10">
+      <div className="bg-white/10 backdrop-blur-md  m-auto rounded-xl shadow-xl max-w-4xl w-full px-6 md:px-24 py-6 space-y-6">
    
         <h2 className="text-center text-xl font-semibold tracking-wide mb-4 uppercase text-white">
           Payment Method

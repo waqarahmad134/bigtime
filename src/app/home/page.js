@@ -1,5 +1,5 @@
-"use client";
-import { useState } from "react";
+"use client"
+import { useState } from "react"
 import {
   Home,
   User,
@@ -10,24 +10,24 @@ import {
   Settings,
   HelpCircle,
   Gamepad2,
-} from "lucide-react";
-import bgImageWallet from "@/assets/Images/referralbg.png";
-import hogwarts from "@/assets/Images/hogwarts.jpg";
-import spiderman from "@/assets/Images/spiderman.jpeg";
-import mortal from "@/assets/Images/mortal.jpg";
-import forza from "@/assets/Images/forza.jpg";
-import pubg from "@/assets/Images/pubg.jpg";
-import hitman from "@/assets/Images/hitman.jpg";
-import minecraft from "@/assets/Images/minecraft.jpg";
-import forza1 from "@/assets/Images/forza1.jpg";
-import gta from "@/assets/Images/gta.jpg";
-import roblox from "@/assets/Images/roblox.jpg";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import RootHeader from "@/components/RootHeader";
+} from "lucide-react"
+import bgImageWallet from "@/assets/Images/referralbg.png"
+import hogwarts from "@/assets/Images/hogwarts.jpg"
+import spiderman from "@/assets/Images/spiderman.jpeg"
+import mortal from "@/assets/Images/mortal.jpg"
+import forza from "@/assets/Images/forza.jpg"
+import pubg from "@/assets/Images/pubg.jpg"
+import hitman from "@/assets/Images/hitman.jpg"
+import minecraft from "@/assets/Images/minecraft.jpg"
+import forza1 from "@/assets/Images/forza1.jpg"
+import gta from "@/assets/Images/gta.jpg"
+import roblox from "@/assets/Images/roblox.jpg"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import RootHeader from "@/components/RootHeader"
 
 export default function Homes() {
-  const router = useRouter();
+  const router = useRouter()
 
   const actualGames = [
     {
@@ -66,7 +66,7 @@ export default function Homes() {
       rating: 4.5,
       image: forza,
     },
-  ];
+  ]
 
   const popularGames = [
     {
@@ -87,7 +87,7 @@ export default function Homes() {
       rating: 4.5,
       image: minecraft,
     },
-  ];
+  ]
 
   const mostPopularGames = [
     {
@@ -108,7 +108,7 @@ export default function Homes() {
       rating: 4.5,
       image: roblox,
     },
-  ];
+  ]
 
   return (
     <>
@@ -127,8 +127,15 @@ export default function Homes() {
           <div className="w-full text-white p-4">
             <div className="">
               <div className="">
-                <div className="relative rounded-lg overflow-hidden">
-                  <Image src={hogwarts} alt="hogwarts" className="min-h-64 w-full" />
+                <div
+                  onClick={() => router.push("/gameinfo")}
+                  className="cursor-pointer relative rounded-lg overflow-hidden"
+                >
+                  <Image
+                    src={hogwarts}
+                    alt="hogwarts"
+                    className="min-h-64 w-full"
+                  />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
                     <h2 className="text-3xl font-bold">HOGWARTS LEGACY</h2>
                     <p className="text-sm mt-1 max-w-lg">
@@ -150,9 +157,9 @@ export default function Homes() {
                 <div>
                   <h3 className="text-xl font-bold my-4">ACTUAL GAMES</h3>
                   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
-                    {actualGames.map((game , index) => (
+                    {actualGames.map((game, index) => (
                       <div
-                        key={game.title+index}
+                        key={game.title + index}
                         className="rounded bg-[#2b0a59] overflow-hidden cursor-pointer"
                         onClick={() => router.push("/gameinfo")}
                       >
@@ -247,5 +254,5 @@ export default function Homes() {
         </div>
       </div>
     </>
-  );
+  )
 }

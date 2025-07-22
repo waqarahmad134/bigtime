@@ -1,3 +1,9 @@
+"use client"
+import { useEffect, useState } from "react"
+import { toast } from "react-hot-toast"
+import { getApi } from "@/lib/apiClient"
+import ThemeBtn from "@/utilities/ThemeBtn"
+
 const UserRow = ({ name, email, status, joinDate, games }) => (
   <>
     <tr className="hover:bg-[#7a59ff8c] border-b-[1px] border-[#374151]">
@@ -27,6 +33,24 @@ const UserRow = ({ name, email, status, joinDate, games }) => (
   </>
 )
 export default function AdminUsersPage() {
+  
+const fetchUsers = async () => {
+  try {
+    const data = await getApi("/reports/flags/", { severity: "high" })
+    setFlags(data || [])
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.detail ||
+        error.message ||
+        "Failed to fetch flagged reports.",
+    )
+  }
+}
+
+useEffect(() => {
+  fetchUsers()
+}, [])
+
   return (
     <>
       <div className="p-8">
