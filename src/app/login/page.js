@@ -67,7 +67,7 @@ export default function LoginPage() {
           localStorage.removeItem("rememberedEmail");
         }
 
-        if(role == "user"){
+        if(data.role == "user"){
           router.push("/home");
         }else{
           router.push("/bigtimeadmin");
