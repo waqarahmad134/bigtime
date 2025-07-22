@@ -16,14 +16,28 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function LoginPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    const rememberedEmail = localStorage.getItem("rememberedEmail");
+
     if (token) {
       router.push("/home");
+    }
+
+    if (rememberedEmail) {
+      setFormData((prev) => ({
+        ...prev,
+        email: rememberedEmail,
+        rememberMe: true,
+      }));
     }
   }, [router]);
 
@@ -46,7 +60,19 @@ export default function LoginPage() {
         localStorage.setItem("accessToken", data.access);
         localStorage.setItem("refreshToken", data.refresh);
         localStorage.setItem("role", data.role);
-        router.push("/home");
+
+        if (formData.rememberMe) {
+          localStorage.setItem("rememberedEmail", formData.email);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
+
+        if(role == "user"){
+          router.push("/home");
+        }else{
+          router.push("/bigtimeadmin");
+        }
+
       } else {
         toast.error(data?.message || "Invalid credentials");
       }
@@ -60,10 +86,21 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col md:flex-row">
-      {/* Background */}
       <div className="before:content-[''] before:absolute before:inset-0 before:bg-[#160430]/60 before:z-[-5]">
-        <Image src={bgImageMobile} alt="Background Mobile" fill className="object-fill pointer-events-none select-none -z-10 block md:hidden" priority />
-        <Image src={bgImage} alt="Background Desktop" fill className="object-fill pointer-events-none select-none -z-10 hidden md:block" priority />
+        <Image
+          src={bgImageMobile}
+          alt="Background Mobile"
+          fill
+          className="object-fill pointer-events-none select-none -z-10 block md:hidden"
+          priority
+        />
+        <Image
+          src={bgImage}
+          alt="Background Desktop"
+          fill
+          className="object-fill pointer-events-none select-none -z-10 hidden md:block"
+          priority
+        />
       </div>
 
       {/* Left Side */}
@@ -74,7 +111,9 @@ export default function LoginPage() {
         <h1 className="font-bebas-neue font-medium text-[96px] text-white leading-tight">BIG TIME</h1>
         <div className="font-poppins leading-none">
           <p className="text-[25px] md:text-[40px] text-white uppercase">Sign in to your</p>
-          <p className="text-[25px] md:text-[40px] uppercase bg-gradient-to-r from-[#BA83CB] to-[#AE69FF] bg-clip-text text-transparent">adventure!</p>
+          <p className="text-[25px] md:text-[40px] uppercase bg-gradient-to-r from-[#BA83CB] to-[#AE69FF] bg-clip-text text-transparent">
+            adventure!
+          </p>
         </div>
       </div>
 
@@ -112,7 +151,10 @@ export default function LoginPage() {
                   required
                   className="pl-11 pr-11 bg-[#190733] text-white py-3 w-full rounded-xl theme-inner-shadow placeholder-gray-400 border-none focus:ring-2 focus:ring-violet-500"
                 />
-                <span onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3 h-5 w-5 text-gray-400 cursor-pointer">
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 h-5 w-5 text-gray-400 cursor-pointer"
+                >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </span>
               </div>
@@ -128,7 +170,12 @@ export default function LoginPage() {
 
             <div className="flex justify-between items-center text-sm text-gray-300">
               <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox h-4 w-4 text-purple-600" />
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-4 w-4 text-purple-600"
+                  checked={formData.rememberMe}
+                  onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                />
                 <span className="ml-2 font-semibold">Remember me</span>
               </label>
               <span className="ml-2 cursor-pointer font-semibold">Forget password</span>

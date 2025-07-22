@@ -11,6 +11,7 @@ import Image from "next/image"
 import { FiCopy, FiSearch } from "react-icons/fi"
 import filterIcon from "@/assets/Images/filter.png"
 import { FaFacebookF, FaLink, FaTwitter, FaWhatsapp } from "react-icons/fa"
+import toast from "react-hot-toast"
 
 const referrals = [
   {
@@ -51,6 +52,7 @@ const referrals = [
 export default function Leaderboard() {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   const [referralCode, setReferralCode] = useState("")
+  const [refCode, setRefCode] = useState("")
   const [activeTab, setActiveTab] = useState("All")
   const [copied, setCopied] = useState(false)
   const inputRef = useRef(null)
@@ -66,26 +68,64 @@ export default function Leaderboard() {
     .filter((r) => r.status === "Completed")
     .reduce((sum, r) => sum + (r.reward || 0), 0)
 
+  // const copyToClipboard = () => {
+  //   const textToCopy = inputRef.current?.value
+  //   if (!textToCopy) return
+  //   navigator.clipboard
+  //     .writeText(textToCopy)
+  //     .then(() => {
+  //       setCopied(true)
+  //       setTimeout(() => setCopied(false), 2000)
+  //     })
+  //     .catch((err) => {
+  //       console.error("❌ Copy failed:", err)
+  //     })
+  // }
+
   const copyToClipboard = () => {
     const textToCopy = inputRef.current?.value
     if (!textToCopy) return
 
-    navigator.clipboard
-      .writeText(textToCopy)
-      .then(() => {
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-      })
-      .catch((err) => {
-        console.error("❌ Copy failed:", err)
-      })
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard
+        .writeText(textToCopy)
+        .then(() => {
+          setCopied(true)
+          toast.success("Copied Sucessfully")
+          setTimeout(() => setCopied(false), 2000)
+        })
+        .catch((err) => {
+          console.error("❌ Copy failed:", err)
+        })
+    } else {
+      // Fallback for insecure context
+      const textarea = document.createElement("textarea")
+      textarea.value = textToCopy
+      textarea.style.position = "fixed" // Avoid scrolling to bottom
+      document.body.appendChild(textarea)
+      textarea.focus()
+      textarea.select()
+
+      try {
+        const success = document.execCommand("copy")
+        if (success) {
+          setCopied(true)
+          setTimeout(() => setCopied(false), 2000)
+        }
+      } catch (err) {
+        console.error("Fallback copy failed", err)
+      }
+
+      document.body.removeChild(textarea)
+    }
   }
+
   const getReferralCode = async () => {
     try {
       let token
 
       if (typeof window !== "undefined") {
-        token = localStorage.getItem("accessToken") 
+        token = localStorage.getItem("accessToken")
       }
       const codeResponse = await fetch(`${API_BASE_URL}/referral/code`, {
         method: "GET",
@@ -114,6 +154,7 @@ export default function Leaderboard() {
 
       if (verifyResponse.ok && verifyData.exists) {
         localStorage.setItem("referralCode", code)
+        setRefCode(code)
         console.log("✅ Referral code verified:", verifyData)
       } else {
         console.warn("❌ Referral verification failed:", verifyData)
@@ -129,7 +170,7 @@ export default function Leaderboard() {
     try {
       let token
       if (typeof window !== "undefined") {
-        token = localStorage.getItem("accessToken") 
+        token = localStorage.getItem("accessToken")
       }
       const response = await fetch(`${API_BASE_URL}/referral/referred/`, {
         method: "GET",
@@ -206,12 +247,12 @@ export default function Leaderboard() {
             <div className="flex-1 flex items-center bg-[#2C1A52] rounded-md px-4 py-2 border border-purple-700">
               <input
                 ref={inputRef}
-                value={`https://www.figma.com/${referralCode}`}
+                value={`http://thebigtimeuniverse.com/signup/${refCode || referralCode}`}
                 className="bg-transparent text-white text-sm flex-1 outline-none"
               />
               <button
                 onClick={copyToClipboard}
-                className="text-purple-400 hover:text-purple-200 transition"
+                className="cursor-pointer text-purple-400 hover:text-purple-200 transition"
               >
                 <FiCopy />
               </button>

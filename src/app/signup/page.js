@@ -1,19 +1,30 @@
-"use client";
-import Image from "next/image";
-import bgImage from "@/assets/Images/BackgroundImage.png";
-import google from "@/assets/Images/google.png";
-import facebook from "@/assets/Images/facebook.png";
-import user from "@/assets/Images/user.png";
-import Logo from "@/assets/Images/Logo.png";
-import { FaGoogle, FaFacebookF } from "react-icons/fa";
-import Link from "next/link";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+"use client"
+import Image from "next/image"
+import bgImage from "@/assets/Images/BackgroundImage.png"
+import google from "@/assets/Images/google.png"
+import facebook from "@/assets/Images/facebook.png"
+import user from "@/assets/Images/user.png"
+import Logo from "@/assets/Images/Logo.png"
+import { FaGoogle, FaFacebookF } from "react-icons/fa"
+import Link from "next/link"
+import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react"
+import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 export default function signup() {
-  const router = useRouter();
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const segments = pathname.split("/")
+    const code = segments[1]
+    if (code) {
+      setFormData((prev) => ({ ...prev, referral_code: code }))
+      setReferralLocked(true)
+    }
+  }, [pathname])
+  
+  const router = useRouter()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -21,21 +32,22 @@ export default function signup() {
     phoneNumber: "",
     password: "",
     confirmPassword: "",
-  });
+    referral_code: "",
+  })
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const response = await fetch(`${API_BASE_URL}/auth/signup/`, {
@@ -44,33 +56,34 @@ export default function signup() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: formData.firstName + formData.lastName, // or however you'd like to combine/make usernames
+          username: formData.firstName + formData.lastName,
           email: formData.email,
           password: formData.password,
           confirm_password: formData.confirmPassword,
+          referral_code: formData.referral_code,
         }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
-        console.log("Signup successful", data);
+        console.log("Signup successful", data)
         // router.push("/otp");
-        router.push(`/otp?email=${encodeURIComponent(formData.email)}`);
+        router.push(`/otp?email=${encodeURIComponent(formData.email)}`)
       } else {
-        console.error("Signup failed", data);
-        alert(data?.message || "Signup failed");
+        console.error("Signup failed", data)
+        alert(data?.message || "Signup failed")
       }
     } catch (error) {
-      console.error("Error during signup:", error);
-      alert("An error occurred. Please try again.");
+      console.error("Error during signup:", error)
+      alert("An error occurred. Please try again.")
     }
-  };
+  }
 
   const handleSocialLogin = (provider) => {
-    console.log(`Login with ${provider}`);
+    console.log(`Login with ${provider}`)
     // Handle social login here
-  };
+  }
   return (
     <div className="relative min-h-screen flex">
       {/* Background */}
@@ -228,6 +241,27 @@ export default function signup() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 gap-5 md:gap-24">
+                <div>
+                  <label className="block text-white text-sm font-semibold mb-2">
+                    Referral Code
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="referral_code"
+                      value={formData.referral_code}
+                      onChange={handleInputChange}
+                      placeholder="Enter Referral Code"
+                      readOnly={referralLocked}
+                      className={`w-full bg-[#261046] border border-white/20 rounded-lg px-10 pr-12 py-3 text-white placeholder-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent ${
+                        referralLocked ? "opacity-60 cursor-not-allowed" : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+
               {/* Sign Up Button */}
               <div className="flex items-center justify-center">
                 <button
@@ -254,8 +288,8 @@ export default function signup() {
                       <span
                         className="text-[white]"
                         onClick={(e) => {
-                          e.preventDefault();
-                          router.push("/login");
+                          e.preventDefault()
+                          router.push("/login")
                         }}
                       >
                         LOGIN
@@ -287,5 +321,5 @@ export default function signup() {
         </div>
       </div>
     </div>
-  );
+  )
 }

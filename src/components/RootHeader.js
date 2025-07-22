@@ -22,7 +22,9 @@ export default function RootHeader() {
 
   const logOutFunc = async () => {
     try {
-      localStorage.clear()
+      localStorage.removeItem("accessToken")
+      localStorage.removeItem("refreshToken")
+      localStorage.removeItem("role")
       window.location.href = "/login"
     } catch (err) {
       toast.error("Something went wrong")
