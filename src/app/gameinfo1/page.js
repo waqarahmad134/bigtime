@@ -421,16 +421,7 @@ export default function Homes() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {images.map((src, index) => (
-                <Image
-                  key={index}
-                  src={src}
-                  alt={`Screenshot ${index + "W"}`}
-                  className="rounded-lg object-cover w-full h-24  hover:scale-105 transition-transform duration-300"
-                />
-              ))}
-            </div>
+          
           </div>
 
           <div className="bg-[#301852] rounded-xl p-6 my-5">
