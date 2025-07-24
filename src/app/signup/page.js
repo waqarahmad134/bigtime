@@ -115,7 +115,7 @@ export default function signup({ referralCode = "" }) {
 
             <div className="space-y-6">
               {/* Name Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-24">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-white text-sm font-semibold mb-2">
                     First Name

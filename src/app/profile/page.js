@@ -132,7 +132,7 @@ export default function Layout({ children }) {
 
           <div className="grid grid-cols-12 gap-4 max-w-7xl mx-auto">
             <div className="col-span-3">
-              <div className="bg-[#8A2BE252] border border-[#8A2BE252] rounded-xl p-5">
+              <div className="bg-[#301852] border border-[#301852] rounded-xl p-5">
                 <div className="relative z-10 flex flex-col items-center text-white">
                   {/* Profile Image and Level */}
                   <div className="relative flex-shrink-0 mb-6">
@@ -231,7 +231,7 @@ export default function Layout({ children }) {
               </div>
             </div>
             <div className="col-span-9">
-              <div className="bg-[#8A2BE252] border border-[#8A2BE252] rounded-xl p-5">
+              <div className="bg-[#301852] border border-[#301852] rounded-xl p-5">
                 <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                   {/* Profile Image and Level */}
                   <div className="relative flex-shrink-0">
@@ -366,7 +366,7 @@ export default function Layout({ children }) {
                 </div>
               </div>
 
-              <div className="bg-[#8A2BE252] border border-[#8A2BE252] rounded-xl overflow-hidden p-10 my-5">
+              <div className="bg-[#301852] border border-[#301852] rounded-xl overflow-hidden p-10 my-5">
                 {activeTab == "profile" ? (
                   <div className="relative z-10">
                     <h2 className="text-white text-xl md:text-2xl font-bold mb-4">

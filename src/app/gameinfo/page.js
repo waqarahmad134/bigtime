@@ -387,7 +387,7 @@ export default function Homes() {
 
                         <div className="text-right mt-4">
                           <button
-                            onClick={() => setShowModal(false)}
+                          onClick={() => setShowModal(false)}
                             className="text-sm text-white hover:underline"
                           >
                             Close

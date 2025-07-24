@@ -72,7 +72,7 @@ export default function RootHeader() {
     <header className="fixed top-0 z-99 w-full px-4 py-3 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 bg-[#2b0a59]">
       {/* LEFT GROUP */}
       <div className="flex items-center gap-3 flex-grow md:flex-grow-0 w-full md:w-auto">
-        <div className="w-[50px] mx-auto flex items-center justify-center gap-3">
+        <div className="w-[50px] mx-auto flex items-center justify-center gap-3 ml-3">
           <button
             onClick={toggleSidebar}
             className="w-8 h-8 rounded flex flex-col items-center justify-center hover:bg-[#5d37a2] transition cursor-pointer"
@@ -132,14 +132,17 @@ export default function RootHeader() {
         </button>
 
         {/* User Profile */}
-        <div className="flex items-center gap-2">
+        <Link
+          href="/profile"
+          className="flex items-center gap-2 cursor-pointer"
+        >
           <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
             QS
           </div>
           <div className="hidden sm:block text-white text-sm leading-tight">
             <p className="font-medium capitalize">{role}</p>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   )
