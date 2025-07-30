@@ -161,7 +161,7 @@ export default function RootSidebar() {
   const [active, setActive] = useState("Home")
 
   const links = [
-    { name: "Home", icon: HouseIcon, href: "/home" },
+    { name: "Home", icon: HouseIcon, href: "/home1" },
     { name: "Tournaments", icon: Tournament, href: "/tournaments" }, // Need high revamp
     { name: "Referral", icon: Referral, href: "/referral" },
     { name: "Sweepstake", icon: Sweetstakes, href: "/sweepstakes" },

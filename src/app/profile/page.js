@@ -4,10 +4,12 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import avatar from "@/assets/Images/rocketleague.png"
 import bgImageWallet from "@/assets/Images/referralbg.png"
-
+import Link from "next/link"
 export default function Layout({ children }) {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   const [profileData, setProfileData] = useState(null)
+  const [friendsData, setFriendsData] = useState(null)
+  console.log("🚀 ~ Layout ~ friendsData:", friendsData)
 
   const fetchProfile = async () => {
     try {
@@ -22,6 +24,8 @@ export default function Layout({ children }) {
           Authorization: `Bearer ${token}`,
         },
       })
+
+      console.log("response.status", response.status)
 
       if (response.status === 401) {
         window.location.href = "/login"
@@ -50,16 +54,16 @@ export default function Layout({ children }) {
       })
 
       const data = await response.json()
-      console.log("🚀 ~ getFriends ~ data:", data)
+      setFriendsData(data)
     } catch (err) {
       console.error("Friends fetch error:", err)
     }
   }
 
-  // useEffect(() => {
-  //   fetchProfile()
-  //   getFriends()
-  // }, [])
+  useEffect(() => {
+    fetchProfile()
+    getFriends()
+  }, [])
 
   const friends = [
     { name: "StarCrusher", color: "bg-blue-500" },
@@ -147,7 +151,9 @@ export default function Layout({ children }) {
                   </div>
 
                   {/* User Name and XP */}
-                  <h1 className="text-2xl font-bold mb-2">CyberNinja</h1>
+                  <h1 className="text-2xl font-bold mb-2">
+                    {profileData?.username}
+                  </h1>
                   <div className="w-full bg-purple-600 rounded-full h-2.5 mb-2">
                     <div
                       className="bg-blue-400 h-2.5 rounded-full"
@@ -182,50 +188,23 @@ export default function Layout({ children }) {
                   {/* Friends Online Section */}
                   <div className="w-full text-left">
                     <h2 className="text-white text-lg font-semibold mb-4">
-                      Friends Online (4)
+                      Friends ({friendsData?.length || "0"})
                     </h2>
-                    <div className="space-y-3">
-                      {/* Friend Item 1 */}
-                      <div className="flex items-center">
-                        <img
-                          src="https://placehold.co/32x32/4A0E4B/FFFFFF?text=S"
-                          alt="StarCrusher"
-                          class="w-8 h-8 rounded-full mr-3 object-cover"
-                        />
-                        <p className="text-white flex-grow">StarCrusher</p>
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    {friendsData?.map((data, index) => (
+                      <div className="space-y-3" key={data.id || index}>
+                        <div className="flex items-center">
+                          <img
+                            src="https://placehold.co/32x32/4A0E4B/FFFFFF?text=S"
+                            alt="StarCrusher"
+                            className="w-8 h-8 rounded-full mr-3 object-cover"
+                          />
+                          <p className="text-white flex-grow">
+                            {data.friend_username}
+                          </p>
+                          {/* <div className="w-2 h-2 bg-green-500 rounded-full"></div> */}
+                        </div>
                       </div>
-                      {/* Friend Item 2 */}
-                      <div className="flex items-center">
-                        <img
-                          src="https://placehold.co/32x32/4A0E4B/FFFFFF?text=V"
-                          alt="VoidWalker"
-                          class="w-8 h-8 rounded-full mr-3 object-cover"
-                        />
-                        <p className="text-white flex-grow">VoidWalker</p>
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      </div>
-                      {/* Friend Item 3 */}
-                      <div className="flex items-center">
-                        <img
-                          src="https://placehold.co/32x32/4A0E4B/FFFFFF?text=C"
-                          alt="CosmicRider"
-                          class="w-8 h-8 rounded-full mr-3 object-cover"
-                        />
-                        <p className="text-white flex-grow">CosmicRider</p>
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      </div>
-                      {/* Friend Item 4 */}
-                      <div className="flex items-center">
-                        <img
-                          src="https://placehold.co/32x32/4A0E4B/FFFFFF?text=N"
-                          alt="NebulaKnight"
-                          class="w-8 h-8 rounded-full mr-3 object-cover"
-                        />
-                        <p className="text-white flex-grow">NebulaKnight</p>
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -248,7 +227,7 @@ export default function Layout({ children }) {
                   {/* User Info and Stats */}
                   <div className="flex-grow text-white text-center md:text-left">
                     <h1 className="text-3xl md:text-4xl font-bold mb-1">
-                      CyberNinja
+                      {profileData?.username}
                     </h1>
                     <p className="text-purple-200 text-sm md:text-base mb-2">
                       Galactic Explorer • Online
@@ -352,15 +331,24 @@ export default function Layout({ children }) {
                       </button>
                     </div>
                     <div className="space-y-4 md:space-y-0 md:space-x-4 ">
-                      <button className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                        Quick Match
-                      </button>
-                      <button className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                      <Link
+                        href="/leaderboard"
+                        className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                      >
+                        Leaderboard
+                      </Link>
+                      <Link
+                        href="/shop"
+                        className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                      >
                         Shop
-                      </button>
-                      <button className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                      </Link>
+                      <Link
+                        href="/tournaments"
+                        className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                      >
                         Tournaments
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

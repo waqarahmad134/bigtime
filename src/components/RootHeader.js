@@ -84,7 +84,7 @@ export default function RootHeader() {
         </div>
 
         <div className="ml-5">
-          <Link href="/home">
+          <Link href="/home1">
             <Image src={Logo} alt="Big Time Logo" width={42} />
           </Link>
         </div>

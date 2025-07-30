@@ -29,7 +29,7 @@ export default function LoginPage() {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
 
     if (token) {
-      router.push("/home");
+      router.push("/home1");
     }
 
     if (rememberedEmail) {
@@ -68,7 +68,7 @@ export default function LoginPage() {
         }
 
         if(data.role == "user"){
-          router.push("/home");
+          router.push("/home1");
         }else{
           router.push("/bigtimeadmin");
         }

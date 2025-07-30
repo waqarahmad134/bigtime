@@ -11,7 +11,10 @@ import {
   HelpCircle,
   Gamepad2,
 } from "lucide-react"
+
 import { useRouter } from "next/navigation"
+import gamesData from "@/app/games.json"
+
 import bgImageWallet from "@/assets/Images/referralbg.png"
 import gameDetail from "@/assets/Images/gameDetail.png"
 import hogwarts from "@/assets/Images/hogwarts.jpg"
@@ -32,29 +35,24 @@ import { FaUserGroup } from "react-icons/fa6"
 import { MdStorage } from "react-icons/md"
 import toast from "react-hot-toast"
 
-const stats = [
-  {
-    value: "4.8",
-    label: "Rating",
-    icon: <FaStar className="text-yellow-400 text-lg" />,
-  },
-  {
-    value: "2.5M",
-    label: "Players",
-    icon: <FaUserGroup className="text-pink-400 text-lg" />,
-  },
-  {
-    value: "13+",
-    label: "Age",
-    icon: <FaDatabase className="text-green-400 text-lg" />,
-  },
-  {
-    value: "85GB",
-    label: "Size",
-    icon: <MdStorage className="text-blue-400 text-lg" />,
-  },
-]
-export default function Homes() {
+export default function Homes({ params }) {
+  const router = useRouter()
+
+  const { slug } = params
+  const game = gamesData.casinoGames.find(
+    (g) =>
+      g.title
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9\-]/g, "") === slug,
+  )
+
+  const { casinoGames } = gamesData
+
+  const recommendedGames = [...casinoGames]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 6)
+
   const [copied, setCopied] = useState(false)
   const gameLink = `https://gaming-app.com/1`
 
@@ -65,7 +63,6 @@ export default function Homes() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
   const [isFollowing, setIsFollowing] = useState(false)
@@ -94,29 +91,6 @@ export default function Homes() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
-  const images = [roblox, spiderman, hogwarts, gta]
-
-  const friends = [
-    { name: "CrimsonTiger67", game: "Resident Evil 4" },
-    { name: "st3alth_sniper", game: "Fortnite" },
-    { name: "IceDragon", game: "ROBLOX" },
-    { name: "BlitzkriegG6", game: "EA Sports FC 24" },
-    { name: "phoenix_rising", game: "Rocket League" },
-    { name: "neonNova", game: "GTA V" },
-  ]
-
-  const recentlyPlayed = [
-    {
-      name: "Hitman World of Assassination",
-      color: "bg-[#2f3b49]",
-      percent: 72,
-    },
-    {
-      name: "Forza Horizon 5",
-      color: "bg-[#209be5]",
-      percent: 47,
-    },
-  ]
 
   const reviews = [
     {
@@ -142,103 +116,16 @@ export default function Homes() {
     },
   ]
 
-  const recommendedGames = [
-    {
-      img: r1,
-      title: `[NightFury Remodel] Rise of`,
-      rating: "91%",
-      user_play: "245",
-    },
-    {
-      img: r2,
-      title: "How to Train Your Dragon",
-      rating: "72%",
-      user_play: "387",
-    },
-    {
-      img: r3,
-      title: "Steal a Brainrot",
-      rating: "90%",
-      user_play: "710k",
-    },
-    {
-      img: r4,
-      title: "99 Nights in the Forest [ALIENS]",
-      rating: "91%",
-      user_play: "1.1m",
-    },
-    {
-      img: r5,
-      title: "Grow a Garden",
-      rating: "93%",
-      user_play: "2.3m",
-    },
-    {
-      img: r6,
-      title: "Pocket Dragons",
-      rating: "96%",
-      user_play: "9bd",
-    },
-  ]
-
-  const stats = [
-    { label: "Active", value: "3.42M" },
-    { label: "Favorites", value: "819,909" },
-    { label: "Visits", value: "55.3M+" },
-    { label: "Voice Chat", value: "Not Supported" },
-    { label: "Camera", value: "Not Supported" },
-    { label: "Created", value: "3/28/2025" },
-    { label: "Updated", value: "7/18/2025" },
-    { label: "Server Size", value: "18" },
-    { label: "Genre", value: "Action" },
-    { label: "Subgenre", value: "Open World Action" },
-  ]
-
-  const achievements = [
-    {
-      icon: "",
-      title: "First Flight",
-      description: "Visited Berk for the first time.",
-      rarity: "100.0% (Freebie)",
-      wonYesterday: "132678",
-      wonEver: "1999423",
-    },
-    {
-      icon: "",
-      title: "This Is Berk",
-      description: "Visited Berk for the first time.",
-      rarity: "100.0% (Freebie)",
-      wonYesterday: "155461",
-      wonEver: "23498619",
-    },
-    {
-      icon: "",
-      title: "Flight Trialist",
-      description: "Complete the flight in under 2 minutes.",
-      rarity: "98% (Freebie)",
-      wonYesterday: "189678",
-      wonEver: "1449423",
-    },
-    {
-      icon: "",
-      title: "Flight Trialist",
-      description: "Complete the flight in under 2 minutes.",
-      rarity: "98% (Freebie)",
-      wonYesterday: "189678",
-      wonEver: "1449423",
-    },
-  ]
-
   return (
-    <div className="relative px-10 py-10  items-center">
+    <div className="relative min-h-screen flex flex-col pb-10">
       <Image
         src={bgImageWallet}
         alt="Background Desktop"
         fill
-        className="object-cover pointer-events-none select-none -z-10 "
+        className="object-cover pointer-events-none select-none -z-10"
         priority
       />
-      <div className="max-w-7xl m-auto">
+      <div className="max-w-[1700px] mx-auto text-white p-6">
         <button
           onClick={() => router.push("/home1")}
           className="cursor-pointer bg-[#301852] rounded-xl px-3 py-2 text-white flex items-center justify-center gap-1"
@@ -259,27 +146,36 @@ export default function Homes() {
         </button>
 
         <main className="text-white my-5">
-          <div className="flex text-white rounded-lg shadow-lg h-full">
-            <div className="w-2/3">
-              <Image
-                src={gameDetail}
-                alt={"Game Details"}
-                className="w-full h-[360px] object-cover rounded-lg"
-              />
+          <div className="flex text-white rounded-lg h-full">
+            <div className="w-2/3 mr-2">
+              <div className="relative w-full h-[360px]">
+                <Image
+                  src={game?.image}
+                  alt="Game Details"
+                  className="object-cover rounded-lg"
+                  fill
+                  unoptimized
+                />
+              </div>
             </div>
-            <div className="w-1/3 pl-4 h-[360px] flex flex-col justify-between">
+            <div className="w-1/3 h-[360px] bg-[#30185266] rounded-xl flex flex-col justify-between p-4">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold">
-                  HOW TO TRAIN <br /> YOUR DRAGON
-                </h2>
-                <p className="text-sm">By How to Train Your Dragon Movie...</p>
-                <p className="text-sm">Maturity: Minimal</p>
-                <p className="text-sm">Develop By: Invoaix Studio</p>
+                <h2 className="text-3xl font-bold">{game?.title}</h2>
+                {/* <p className="text-sm">By How to Train Your Dragon Movie...</p> */}
+                <p className="text-lg">Maturity: Minimal</p>
+                <p className="text-lg">Develop By: BigTime</p>
               </div>
               <div>
-                <button className="mt-4 w-full cursor-pointer bg-[#301852] text-white font-bold py-2 px-4 rounded">
-                  <span className="text-2xl">▶</span>
-                </button>
+                <div>
+                  <a
+                    href={game?.action}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    className="mt-4 text-center block w-full cursor-pointer bg-[#301852] text-white font-bold py-2 px-4 rounded"
+                  >
+                    <span className="text-2xl">▶</span>
+                  </a>
+                </div>
                 <div className="flex justify-between mt-2 text-sm">
                   <div className="flex flex-col items-center justify-center">
                     <svg
@@ -337,7 +233,7 @@ export default function Homes() {
 
                     <span>10.8K</span>
                   </div>
-                  <div className="flex flex-col items-center justify-center">
+                  {/* <div className="flex flex-col items-center justify-center">
                     <svg
                       width="28"
                       height="29"
@@ -364,7 +260,7 @@ export default function Homes() {
                     </svg>
 
                     <span>4.03K</span>
-                  </div>
+                  </div> */}
                   <div className="flex flex-col items-center justify-center">
                     <svg
                       width="28"
@@ -399,54 +295,37 @@ export default function Homes() {
           </div>
 
           <div className="bg-[#301852] rounded-xl p-6 my-5">
-            <h2 className="text-lg font-bold mb-4">
-              How To Train Your Dragon – Now Available to Own or Rent!
-            </h2>
-            <p className="text-gray-300 text-sm mb-6">
-              Celebrate with our brand-new FLIGHT CHALLENGE UPDATE!
-            </p>
-            <p className="text-gray-300 text-sm mb-6">
-              Take on the ultimate Flight Challenge by accepting Gobber’s quest
-              and soaring into an action-packed aerial race where every second
-              counts. Grab your favorite dragon and navigate obstacles, blast
-              fiery targets for bonus rewards, and rocket through glowing rings
-              at top speed. Check your stats at the finish line and climb the
-              live leaderboard. Are you ready to become a dragon-riding legend?
-              ⚔️ 🛡️🐲 💥
-            </p>
+            <h2 className="text-lg font-bold mb-4">{game?.title}</h2>
+            <p className="text-gray-300 text-lg mb-6">{game?.description}</p>
             <div className="flex items-center gap-4">
               <p className="text-gray-300 text-sm mb-6">Maturity: Minimal</p>
               <p className="text-gray-300 text-sm mb-6">
                 Suitable for everyone
               </p>
             </div>
-
-          
           </div>
 
-          <div className="bg-[#301852] rounded-xl p-6 my-5">
+          {/* <div className="bg-[#301852] rounded-xl p-6 my-5">
             <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-4 text-white text-center">
               {stats.map((stat, index) => (
                 <div key={`label-${index}`} className="font-normal text-sm">
                   {stat.label}
                 </div>
               ))}
-              {/* Render the values for each statistic */}
               {stats.map((stat, index) => (
                 <div key={`value-${index}`} className="text-sm mt-1">
                   {stat.value}
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {achievements.map((achievement, index) => (
               <div
                 key={index}
                 className="bg-[#301852] rounded-2xl shadow-xl p-6 text-white flex flex-col items-center text-center"
               >
-                {/* Achievement Icon */}
                 <div className="flex items-center text-start flex-start gap-2">
                   <img
                     src={achievement.icon}
@@ -469,12 +348,10 @@ export default function Homes() {
                   </div>
                 </div>
 
-                {/* Rarity */}
                 <div className="w-full border-t border-b border-white border-opacity-30 py-2 mb-4">
                   <p className="text-lg font-semibold">{achievement.rarity}</p>
                 </div>
 
-                {/* Won Yesterday */}
                 <div className="w-full mb-2">
                   <p className="text-sm opacity-80">Won Yesterday</p>
                   <p className="text-lg font-medium">
@@ -482,30 +359,41 @@ export default function Homes() {
                   </p>
                 </div>
 
-                {/* Won Ever */}
                 <div className="w-full">
                   <p className="text-sm opacity-80">Won Ever</p>
                   <p className="text-lg font-medium">{achievement.wonEver}</p>
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
 
           {/* Recommended Experiences */}
           <div className="bg-[#301852] rounded-xl p-6 my-5">
             <h2 className="text-lg font-bold mb-4">Recommended Experiences</h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
               {recommendedGames?.map((game, index) => (
                 <div>
-                  <div>
-                    <Image
-                      key={index}
-                      src={game?.img}
-                      alt={`Screenshot R${index + 1}`}
-                      height={170}
-                      className="rounded-lg object-cover hover:scale-105 transition-transform duration-300"
-                    />
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      const slug = game.title
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")
+                        .replace(/[^a-z0-9\-]/g, "")
+                      router.push(`/casinogames/${slug}`)
+                    }}
+                  >
+                    <div className="relative w-full h-[170px]">
+                      <Image
+                        key={index}
+                        src={game?.image}
+                        className="rounded-lg object-cover hover:scale-105 transition-transform duration-300"
+                        fill
+                        unoptimized
+                        alt={`Screenshot R${index + 1}`}
+                      />
+                    </div>
                   </div>
                   <div className="mt-2">
                     <h4>{game?.title}</h4>
@@ -548,7 +436,7 @@ export default function Homes() {
                           </defs>
                         </svg>
 
-                        {game?.rating}
+                        {game?.rating || "0"}
                       </span>
                       <span>
                         <svg

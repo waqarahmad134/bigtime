@@ -22,6 +22,8 @@ import professor from "@/assets/Images/home1/professor.png"
 import party from "@/assets/Images/home1/party.jpg"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import gamesData from "@/app/games.json"
+
 import RootHeader from "@/components/RootHeader"
 
 const TokenIcon = () => (
@@ -126,64 +128,57 @@ const tokenPacks = [
 ]
 
 export default function Homes() {
+  const { casinoSlots } = gamesData
+  const { casinoGames } = gamesData
+  const recommendedGames = [...casinoSlots]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 4)
+
   const router = useRouter()
 
-  const casinoGames = [
-    {
-      title: "Legends",
-      image: legend,
-      rating: "95%",
-    },
-    {
-      title: "Manhattan Mirage",
-      image: migrane,
-      rating: "99%",
-    },
-    {
-      title: "King Chita",
-      image: king,
-      rating: "79%",
-    },
-    {
-      title: "Fire Shot Link",
-      image: fire,
-      rating: "69%",
-    },
-    {
-      title: "Pyramid Cash Bar",
-      image: pyramid,
-      rating: "89%",
-    },
-    {
-      title: "Twist & Link",
-      image: twist,
-      rating: "92%",
-    },
-    {
-      title: "Professor Chiflado",
-      image: professor,
-      rating: "93%",
-    },
-    {
-      title: "Manhattan Party",
-      image: party,
-      rating: "93%",
-    },
-  ]
+  // const casinoGames = [
+  //   {
+  //     title: "Legends",
+  //     image: legend,
+  //     rating: "95%",
+  //   },
+  //   {
+  //     title: "Manhattan Mirage",
+  //     image: migrane,
+  //     rating: "99%",
+  //   },
+  //   {
+  //     title: "King Chita",
+  //     image: king,
+  //     rating: "79%",
+  //   },
+  //   {
+  //     title: "Fire Shot Link",
+  //     image: fire,
+  //     rating: "69%",
+  //   },
+  //   {
+  //     title: "Pyramid Cash Bar",
+  //     image: pyramid,
+  //     rating: "89%",
+  //   },
+  //   {
+  //     title: "Twist & Link",
+  //     image: twist,
+  //     rating: "92%",
+  //   },
+  //   {
+  //     title: "Professor Chiflado",
+  //     image: professor,
+  //     rating: "93%",
+  //   },
+  //   {
+  //     title: "Manhattan Party",
+  //     image: party,
+  //     rating: "93%",
+  //   },
+  // ]
 
-  function shuffleArray(array) {
-    const shuffledArray = [...array]
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[shuffledArray[i], shuffledArray[j]] = [
-        shuffledArray[j],
-        shuffledArray[i],
-      ]
-    }
-    return shuffledArray
-  }
-
-  const shuffledGames = shuffleArray(casinoGames)
 
   return (
     <>
@@ -196,7 +191,7 @@ export default function Homes() {
           priority
         />
 
-        <div className="min-h-screen w-[1230px] max-w-[1230px] m-auto text-white p-6">
+        <div className="min-h-screen m-auto text-white p-6">
           <div className="mt-3 mb-5">
             <h2 className="font-bebas-neue tracking-wide text-5xl">Home</h2>
           </div>
@@ -204,21 +199,28 @@ export default function Homes() {
           {/* Casino  */}
           <div className="bg-[#1F1339] text-white rounded-xl p-4 md:p-6 space-y-4 w-full">
             <h3 className="font-poppins text-xl font-semibold">
-              Casino Games Foryou
+              Games Foryou
             </h3>
-            <div className="grid md:grid-cols-4 gap-5">
+            <div className="grid md:grid-cols-5 gap-5">
               {casinoGames.map((game, index) => (
                 <div
                   className="game-card cursor-pointer rounded-xl"
                   key={index}
-                  onClick={() => router.push("/gameinfo1")}
+                  onClick={() => {
+                    const slug = game.title
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/[^a-z0-9\-]/g, "")
+                    router.push(`/casinogames/${slug}`)
+                  }}
                 >
                   <div className="h-[230px] ">
                     <Image
                       src={game.image}
                       alt={game.title}
-                      // width={300}
+                      width={300}
                       height={230}
+                      unoptimized
                       className="h-[230px] w-full object-cover rounded-xl"
                     />
                   </div>
@@ -260,22 +262,27 @@ export default function Homes() {
 
           {/* Casino Slot */}
           <div className="bg-[#1F1339] text-white rounded-xl p-4 md:p-6 space-y-4 w-full my-10">
-            <h3 className="font-poppins text-xl font-semibold">
-              Casino Games Foryou
-            </h3>
-            <div className="grid md:grid-cols-4 gap-5">
-              {shuffledGames.map((game, index) => (
+            <h3 className="font-poppins text-xl font-semibold">Casino Slots</h3>
+            <div className="grid md:grid-cols-5 gap-5">
+              {casinoSlots.map((game, index) => (
                 <div
                   className="game-card cursor-pointer rounded-xl"
                   key={index}
-                  onClick={() => router.push("/gameinfogamble")}
+                  onClick={() => {
+                    const slug = game.title
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/[^a-z0-9\-]/g, "")
+                    router.push(`/casinoslots/${slug}`)
+                  }}
                 >
                   <div className="h-[230px] ">
                     <Image
                       src={game.image}
                       alt={game.title}
-                      // width={300}
                       height={230}
+                      width={230} // Replace with actual width
+                      unoptimized // Optional if you don't want Next to optimize external images
                       className="h-[230px] w-full object-cover rounded-xl"
                     />
                   </div>
@@ -308,7 +315,7 @@ export default function Homes() {
                         </clipPath>
                       </defs>
                     </svg>
-                    <p>{game.rating} Rating</p>
+                    <p>{game.rating || "4.5"} Rating</p>
                   </div>
                 </div>
               ))}
@@ -318,22 +325,29 @@ export default function Homes() {
           {/* Recommended  */}
           <div className="bg-[#1F1339] rounded-xl p-4 md:p-6 space-y-4 w-full">
             <h3 className="font-poppins text-xl font-semibold">
-              Casino Games Foryou
+              Recommended For You
             </h3>
             <div className="grid md:grid-cols-4 gap-5">
-              {casinoGames.slice(0, 5).map((game, index) => (
+              {recommendedGames.map((game, index) => (
                 <div
-                  className="game-card cursor-pointer rounded-xl border boder-white bg-white"
                   key={index}
-                  onClick={() => router.push("/gameinfo1")}
+                  className="cursor-pointer rounded-xl border border-white bg-white"
+                  onClick={() => {
+                    const slug = game.title
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/[^a-z0-9\-]/g, "")
+                    router.push(`/casinoslots/${slug}`)
+                  }}
                 >
-                  <div className="h-[230px] ">
+                  <div className="h-[230px]">
                     <Image
                       src={game.image}
                       alt={game.title}
-                      // width={300}
+                      width={400}
                       height={230}
-                      className="h-[230px] w-full object-cover rounded-t-2xl "
+                      className="h-[230px] w-full object-cover rounded-t-2xl"
+                      unoptimized
                     />
                   </div>
                   <div className="text-black px-3">
@@ -351,7 +365,7 @@ export default function Homes() {
                         <g clipPath="url(#clip0_1045_7866)">
                           <path
                             d="M9.5295 15.5464H10.4598C11.2969 15.5464 12.0201 15.4929 12.4958 15.3789C13.4198 15.1512 13.9958 14.5084 13.9958 13.6846C13.9951 13.5212 13.9703 13.3588 13.9221 13.2026C14.3841 12.8678 14.6449 12.3521 14.6449 11.7964C14.6449 11.5221 14.5915 11.2541 14.4912 11.0329C14.7992 10.7184 14.9866 10.2561 14.9866 9.76721C14.9866 9.45264 14.9066 9.11778 14.7658 8.87664C14.9601 8.60235 15.0672 8.23378 15.0672 7.82521C15.0672 6.82749 14.2901 6.03749 13.2926 6.03749H10.7612C10.6006 6.03749 10.4935 5.96378 10.4935 5.82978C10.4935 5.10007 11.6318 3.40578 11.6318 2.04635C11.6318 1.12235 10.9889 0.452637 10.0984 0.452637C9.44207 0.452637 9.00007 0.794065 8.56493 1.62464C7.74779 3.19149 6.7835 4.57778 5.18979 6.51949H3.9175C2.2635 6.51949 0.9375 8.38807 0.9375 10.6715C0.9375 12.9281 2.3975 14.8029 4.17179 14.8029H6.38179C7.26579 15.2652 8.33721 15.5464 9.52921 15.5464M10.4664 14.5352L9.53579 14.5218C6.73007 14.5018 4.82836 12.9146 4.82836 10.6378C4.82836 9.19149 5.14979 8.26721 6.06036 7.04864C7.07179 5.70264 8.46436 4.08864 9.46893 2.08664C9.73664 1.55092 9.8775 1.46378 10.0984 1.46378C10.4264 1.46378 10.6206 1.67149 10.6206 2.04664C10.6206 3.13121 9.48236 4.77864 9.48236 5.82978C9.48236 6.58664 10.1118 7.04864 10.9086 7.04864H13.2926C13.7346 7.04864 14.0561 7.38349 14.0561 7.82549C14.0561 8.14692 13.9555 8.35435 13.6944 8.60892C13.6275 8.67578 13.5938 8.74292 13.5938 8.81635C13.5938 8.87007 13.6138 8.93035 13.6609 8.98378C13.8818 9.30521 13.9755 9.50607 13.9755 9.76721C13.9755 10.0889 13.8215 10.3566 13.5201 10.5909C13.3929 10.6846 13.3258 10.7918 13.3258 10.9058C13.3258 10.9458 13.3326 10.9929 13.3595 11.0398C13.5538 11.4081 13.6338 11.5552 13.6338 11.7964C13.6338 12.1581 13.4064 12.4326 12.9244 12.6804C12.8238 12.7338 12.7635 12.8144 12.7635 12.9146C12.7635 12.9546 12.7769 12.9949 12.7969 13.0418C12.9644 13.4504 12.9844 13.5172 12.9844 13.6846C12.9844 14.0129 12.7435 14.2741 12.2546 14.3946C11.8595 14.4949 11.2298 14.5418 10.4664 14.5352ZM4.17236 13.7918C2.98693 13.7918 1.94893 12.3655 1.94893 10.6715C1.94893 8.94378 2.87979 7.53064 3.91779 7.53064H4.53379C4.0315 8.46835 3.81721 9.45264 3.81721 10.6178C3.81721 11.8766 4.27264 12.9615 5.08293 13.7921L4.17236 13.7918Z"
-                            fill="#000000"
+                            fill="black"
                           />
                         </g>
                         <defs>
@@ -359,13 +373,13 @@ export default function Homes() {
                             <rect
                               width="16"
                               height="16"
-                              fill="white"
+                              fill="black"
                               transform="translate(0 -0.000488281)"
                             />
                           </clipPath>
                         </defs>
                       </svg>
-                      <p>{game.rating} Rating</p>
+                      <p>{game.rating || "4.7"} Rating</p>
                     </div>
                   </div>
                 </div>
@@ -442,7 +456,7 @@ export default function Homes() {
                   </div>
                   <button
                     onClick={() => router.push("/shop")}
-                    className="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 rounded-full transition duration-300 shadow-lg"
+                    className="bg-[#7A59FF4D] w-[200px] cursor-pointer hover:bg-purple-800 text-white font-bold py-3 rounded-xl transition duration-300 shadow-lg"
                   >
                     Get Premium
                   </button>

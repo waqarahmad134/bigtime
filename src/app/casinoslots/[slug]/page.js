@@ -11,6 +11,8 @@ import {
   Gamepad2,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import gamesData from "@/app/games.json"
+
 import bgImageWallet from "@/assets/Images/referralbg.png"
 import hogwarts from "@/assets/Images/hogwarts.jpg"
 import spiderman from "@/assets/Images/spiderman.jpeg"
@@ -102,50 +104,64 @@ const rewardData = [
   },
 ]
 
-export default function Homes() {
+export default function Homes({ params }) {
   const router = useRouter()
+  const { slug } = params
+  const game = gamesData.casinoSlots.find(
+    (g) =>
+      g.title
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9\-]/g, "") === slug,
+  )
+  const { casinoSlots } = gamesData
+
+  const recommendedGames = [...casinoSlots]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 5)
+
   const [activeTab, setActiveTab] = useState("About")
 
-  const tabs = ["About", "Store", "Servers"]
+  const tabs = ["About"]
 
-  const recommendedGames = [
-    {
-      img: r1,
-      title: `[NightFury Remodel] Rise of`,
-      rating: "91%",
-      user_play: "245",
-    },
-    {
-      img: r2,
-      title: "How to Train Your Dragon",
-      rating: "72%",
-      user_play: "387",
-    },
-    {
-      img: r3,
-      title: "Steal a Brainrot",
-      rating: "90%",
-      user_play: "710k",
-    },
-    {
-      img: r4,
-      title: "99 Nights in the Forest [ALIENS]",
-      rating: "91%",
-      user_play: "1.1m",
-    },
-    // {
-    //   img: r5,
-    //   title: "Grow a Garden",
-    //   rating: "93%",
-    //   user_play: "2.3m",
-    // },
-    // {
-    //   img: r6,
-    //   title: "Pocket Dragons",
-    //   rating: "96%",
-    //   user_play: "9bd",
-    // },
-  ]
+  // const recommendedGames = [
+  //   {
+  //     img: r1,
+  //     title: `[NightFury Remodel] Rise of`,
+  //     rating: "91%",
+  //     user_play: "245",
+  //   },
+  //   {
+  //     img: r2,
+  //     title: "How to Train Your Dragon",
+  //     rating: "72%",
+  //     user_play: "387",
+  //   },
+  //   {
+  //     img: r3,
+  //     title: "Steal a Brainrot",
+  //     rating: "90%",
+  //     user_play: "710k",
+  //   },
+  //   {
+  //     img: r4,
+  //     title: "99 Nights in the Forest [ALIENS]",
+  //     rating: "91%",
+  //     user_play: "1.1m",
+  //   },
+  //   // {
+  //   //   img: r5,
+  //   //   title: "Grow a Garden",
+  //   //   rating: "93%",
+  //   //   user_play: "2.3m",
+  //   // },
+  //   // {
+  //   //   img: r6,
+  //   //   title: "Pocket Dragons",
+  //   //   rating: "96%",
+  //   //   user_play: "9bd",
+  //   // },
+  // ]
 
   const stats = [
     { label: "Active", value: "2,421" },
@@ -160,15 +176,15 @@ export default function Homes() {
   ]
 
   return (
-    <div className="relative px-10 py-10  items-center">
+    <div className="relative min-h-screen flex flex-col pb-10">
       <Image
         src={bgImageWallet}
         alt="Background Desktop"
         fill
-        className="object-cover pointer-events-none select-none -z-10 "
+        className="object-cover pointer-events-none select-none -z-10"
         priority
       />
-      <div className="max-w-7xl m-auto">
+      <div className="max-w-[1700px] mx-auto text-white p-6">
         <button
           onClick={() => router.push("/home1")}
           className="cursor-pointer bg-[#301852] rounded-xl px-3 py-2 text-white flex items-center justify-center gap-1"
@@ -203,20 +219,25 @@ export default function Homes() {
             <div className="absolute inset-0 p-6 text-white flex flex-col justify-between">
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold mb-3">
-                  ROYAL BLACKJACK
+                  {game.title}
                 </h1>
                 <p className="text-sm opacity-90">
                   By Vegas Casino Studios <span className="mx-1">/</span> <br />{" "}
-                  Maturity: 18+ <span className="mx-1">•</span> Develop by
-                  Invoxi Studio
+                  Maturity: 18+ <span className="mx-1">•</span> Develop by Big
+                  Time Universe
                 </p>
               </div>
 
               {/* CTA + Footer Info */}
               <div>
-                <button className="bg-[#7A59FF] text-white px-5 py-2 rounded-full font-semibold hover:bg-[#6746d6] transition">
+                <a
+                  href={game?.action}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  className="bg-[#7A59FF] cursor-pointer text-white px-5 py-2 rounded-full font-semibold hover:bg-[#6746d6] transition"
+                >
                   PLAY NOW
-                </button>
+                </a>
 
                 <div className="mt-4 flex gap-6 text-xs opacity-90">
                   <span className="flex flex-col justify-center items-center gap-1">
@@ -225,9 +246,9 @@ export default function Homes() {
                   <span className="flex flex-col justify-center items-center gap-1">
                     <ThumbsUp size={24} /> 10K+
                   </span>
-                  <span className="flex flex-col justify-center items-center gap-1">
+                  {/* <span className="flex flex-col justify-center items-center gap-1">
                     <Eye size={24} /> 4.89B
-                  </span>
+                  </span> */}
                   <span className="flex flex-col justify-center items-center gap-1">
                     <Share2 size={24} /> Shares
                   </span>
@@ -260,20 +281,9 @@ export default function Homes() {
             <>
               {/* Detail Section  */}
               <div className="bg-[#301852] rounded-xl p-6 my-5">
-                <h2 className="text-lg font-bold mb-4">
-                  Royal Blackjack - Premium Casino Experience!
-                </h2>
+                <h2 className="text-lg font-bold mb-4">{game.title}</h2>
                 <p className="text-gray-300 text-sm mb-6">
-                  Celebrate with our brand-new JACKPOT BONUS UPDATE!
-                </p>
-                <p className="text-gray-300 text-sm mb-6">
-                  Take on the ultimate Blackjack Challenge by accepting the
-                  dealer's quest and diving into an action-packed casino
-                  experience where every second counts. Grab your cards,
-                  navigate through high-stakes obstacles, hit perfect 21s for
-                  bonus rewards, and rocket through glowing casino halls at top
-                  speed. Check your stats at the finish line and climb the live
-                  leaderboard. Are you ready to become a blackjack legend? 🃏⚡
+                  {game.description} 🃏⚡
                 </p>
                 <div className="flex items-center gap-4">
                   <p className="text-gray-300 text-sm mb-6 bg-[#7A59FF82] rounded-full py-2 px-3">
@@ -286,7 +296,7 @@ export default function Homes() {
               </div>
 
               {/* Stats Section  */}
-              <div className="rounded-xl my-5 border boder-[#FFFFFF0D] overflow-hidden">
+              {/* <div className="rounded-xl my-5 border boder-[#FFFFFF0D] overflow-hidden">
                 <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-9 text-white text-center overflow-hidden">
                   {stats.map((stat, index) => (
                     <div
@@ -296,7 +306,6 @@ export default function Homes() {
                       {stat.label}
                     </div>
                   ))}
-                  {/* Render the values for each statistic */}
                   {stats.map((stat, index) => (
                     <div
                       key={`value-${index}`}
@@ -306,9 +315,9 @@ export default function Homes() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {rewardData.map((reward, index) => (
                   <div
                     key={index}
@@ -341,7 +350,7 @@ export default function Homes() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </div> */}
 
               {/* Recommended Experiences */}
               <div className="bg-[#301852] rounded-xl p-6 my-5">
@@ -349,15 +358,27 @@ export default function Homes() {
                   Recommended Experiences
                 </h2>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                   {recommendedGames?.map((game, index) => (
-                    <div>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => {
+                        const slug = game.title
+                          .toLowerCase()
+                          .replace(/\s+/g, "-")
+                          .replace(/[^a-z0-9\-]/g, "")
+                        router.push(`/casinoslots/${slug}`)
+                      }}
+                    >
                       <div>
                         <Image
                           key={index}
-                          src={game?.img}
-                          alt={`Screenshot R${index + 1}`}
+                          src={game?.image}
                           className="rounded-lg object-cover hover:scale-105 transition-transform duration-300"
+                          width={400}
+                          height={230}
+                          unoptimized
+                          alt={`Screenshot R${index + 1}`}
                         />
                       </div>
                       <div className="mt-2">
