@@ -1,44 +1,25 @@
 "use client"
 import { useEffect, useState } from "react"
-import {
-  Home,
-  User,
-  Trophy,
-  Wallet,
-  Gift,
-  Sparkles,
-  Settings,
-  HelpCircle,
-  Gamepad2,
-} from "lucide-react"
-
 import { useRouter } from "next/navigation"
-import gamesData from "@/app/games.json"
-
-import bgImageWallet from "@/assets/Images/referralbg.png"
-import gameDetail from "@/assets/Images/gameDetail.png"
-import hogwarts from "@/assets/Images/hogwarts.jpg"
-import spiderman from "@/assets/Images/spiderman.jpeg"
-import r1 from "@/assets/Images/recommended/r1.png"
-import r2 from "@/assets/Images/recommended/r2.png"
-import r3 from "@/assets/Images/recommended/r3.png"
-import r4 from "@/assets/Images/recommended/r4.png"
-import r5 from "@/assets/Images/recommended/r5.png"
-import r6 from "@/assets/Images/recommended/r6.png"
-
-import gta from "@/assets/Images/gta.jpg"
-import roblox from "@/assets/Images/roblox.jpg"
-import Image from "next/image"
-import Link from "next/link"
-import { FaStar, FaDatabase, FaStarHalfAlt } from "react-icons/fa"
-import { FaUserGroup } from "react-icons/fa6"
-import { MdStorage } from "react-icons/md"
 import toast from "react-hot-toast"
+import gamesData from "@/app/games.json"
+import bgImageWallet from "@/assets/Images/referralbg.png"
+import Image from "next/image"
 
 export default function Homes({ params }) {
   const router = useRouter()
-
   const { slug } = params
+  const { casinoGames } = gamesData
+  const [copied, setCopied] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [isLike, setIsLike] = useState(false)
+  console.log("🚀 ~ Homes ~ isLike:", isLike)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [active, setActive] = useState("Home")
+
+  const gameLink = `https://gaming-app.com/1`
+
   const game = gamesData.casinoGames.find(
     (g) =>
       g.title
@@ -47,74 +28,67 @@ export default function Homes({ params }) {
         .replace(/[^a-z0-9\-]/g, "") === slug,
   )
 
-  const { casinoGames } = gamesData
-
   const recommendedGames = [...casinoGames]
     .sort(() => 0.5 - Math.random())
     .slice(0, 6)
 
-  const [copied, setCopied] = useState(false)
-  const gameLink = `https://gaming-app.com/1`
+  // const copyToClipboard = () => {
+  //   navigator.clipboard.writeText(gameLink)
+  //   setCopied(true)
+  //   toast.success("Link copied!")
+  //   setTimeout(() => setCopied(false), 2000)
+  // }
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(gameLink)
-    setCopied(true)
-    toast.success("Link copied!")
-    setTimeout(() => setCopied(false), 2000)
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard
+        .writeText(gameLink)
+        .then(() => {
+          setCopied(true)
+          toast.success("Link copied!")
+          setTimeout(() => setCopied(false), 2000)
+        })
+        .catch((err) => {
+          toast.error("Failed to copy link")
+          console.error("Clipboard error:", err)
+        })
+    } else {
+      toast.error("Clipboard not supported")
+    }
   }
-
-  const [showModal, setShowModal] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [isFollowing, setIsFollowing] = useState(false)
 
   useEffect(() => {
-    const fav = localStorage.getItem("favoriteStatus")
-    setIsFavorite(fav === "true")
-    const followingStatus = localStorage.getItem("followingStatus")
-    setIsFollowing(followingStatus === "true")
-  }, [])
+    const gameId = game?.id
+    if (!gameId) return
+
+    const likeStorage = JSON.parse(localStorage.getItem("likeStatus") || "{}")
+    const favoriteStorage = JSON.parse(
+      localStorage.getItem("favoriteStatus") || "{}",
+    )
+
+    setIsLike(likeStorage[gameId] || false)
+    setIsFavorite(favoriteStorage[gameId] || false)
+  }, [game?.id])
 
   const toggleFavorite = () => {
-    const newStatus = !isFavorite
+    const gameId = game?.id
+    if (!gameId) return
+    const favorites = JSON.parse(localStorage.getItem("favoriteStatus") || "{}")
+    const newStatus = !favorites[gameId]
+    favorites[gameId] = newStatus
+    localStorage.setItem("favoriteStatus", JSON.stringify(favorites))
     setIsFavorite(newStatus)
-    localStorage.setItem("favoriteStatus", newStatus.toString())
-  }
-  const toggleFollowing = () => {
-    const newStatus = !isFollowing
-    setIsFollowing(newStatus)
-    localStorage.setItem("followingStatus", newStatus.toString())
   }
 
-  const [searchQuery, setSearchQuery] = useState("")
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const [active, setActive] = useState("Home")
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
+  const toggleLike = () => {
+    const gameId = game?.id
+    if (!gameId) return
+    const likes = JSON.parse(localStorage.getItem("likeStatus") || "{}")
+    const newStatus = !likes[gameId]
+    likes[gameId] = newStatus
+    localStorage.setItem("likeStatus", JSON.stringify(likes))
+    setIsLike(newStatus)
   }
-
-  const reviews = [
-    {
-      user: "Hermione_Granger",
-      house: "Gryffindor",
-      houseColor: "bg-red-600",
-      stars: 5,
-      text: "The attention to detail in recreating the wizarding world is absolutely magical! The spell-casting mechanics feel incredibly immersive.",
-    },
-    {
-      user: "Draco_Malfoy",
-      house: "Slytherin",
-      houseColor: "bg-green-600",
-      stars: 4.5,
-      text: "Even someone of my refined taste can appreciate the dark arts implementation. The graphics are simply superior, as expected.",
-    },
-    {
-      user: "Luna_Lovegood",
-      house: "Ravenclaw",
-      houseColor: "bg-blue-500",
-      stars: 5,
-      text: "The magical creatures are beautifully rendered! I spent hours just observing the Nargles… I mean, the fantastic beasts.",
-    },
-  ]
 
   return (
     <div className="relative min-h-screen flex flex-col pb-10">
@@ -160,10 +134,11 @@ export default function Homes({ params }) {
             </div>
             <div className="w-1/3 h-[360px] bg-[#30185266] rounded-xl flex flex-col justify-between p-4">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold">{game?.title}</h2>
-                {/* <p className="text-sm">By How to Train Your Dragon Movie...</p> */}
+                <h2 className="text-3xl font-bold">{game?.title} </h2>
                 <p className="text-lg">Maturity: Minimal</p>
                 <p className="text-lg">Develop By: BigTime</p>
+                <p className="text-lg">Limit : Adult (18+)</p>
+                <p className="text-lg">Genre : Action , Story</p>
               </div>
               <div>
                 <div>
@@ -176,92 +151,125 @@ export default function Homes({ params }) {
                     <span className="text-2xl">▶</span>
                   </a>
                 </div>
-                <div className="flex justify-between mt-2 text-sm">
-                  <div className="flex flex-col items-center justify-center">
-                    <svg
-                      width="28"
-                      height="29"
-                      viewBox="0 0 28 29"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                <div className="flex gap-3 mt-2 text-sm cursor-pointer h-[49px]">
+                  {!isFavorite ? (
+                    <div
+                      onClick={() => {
+                        toggleFavorite()
+                        toast.success("Add To Favorite")
+                      }}
+                      className="flex flex-col items-center justify-center"
                     >
-                      <g clipPath="url(#clip0_1045_1839)">
-                        <path
-                          d="M21.0024 26.2208C20.8024 26.2208 20.7024 26.2208 20.5024 26.1208L14.0024 22.4207L7.50249 26.1208C7.20249 26.3208 6.80249 26.3208 6.40249 26.1208C6.10249 25.9208 5.90249 25.5208 6.00249 25.1208L6.90249 17.6208L2.20249 12.9207C1.90249 12.6207 1.80249 12.2207 2.00249 11.9207C2.10249 11.5207 2.40249 11.3208 2.80249 11.2208L9.30249 10.3208L13.1024 3.72075C13.5024 3.12075 14.5024 3.12075 14.8024 3.72075L18.6024 10.3208L25.1024 11.2208C25.5024 11.3208 25.8024 11.5207 25.9024 11.9207C26.0024 12.3207 25.9024 12.7207 25.7024 12.9207L21.0024 17.6208L21.9024 25.1208C21.9024 25.5208 21.8024 25.8208 21.5024 26.1208C21.4024 26.1208 21.2024 26.2208 21.0024 26.2208ZM14.0024 20.2208C14.2024 20.2208 14.3024 20.2208 14.5024 20.3208L19.8024 23.3208L19.0024 17.3208C19.0024 17.0208 19.1024 16.7208 19.3024 16.5208L22.9024 12.9207L17.9024 12.2208C17.6024 12.2208 17.3024 12.0208 17.2024 11.7208L14.0024 6.22075L10.9024 11.7208C10.7024 12.0208 10.5024 12.2208 10.2024 12.2208L5.20249 12.9207L8.80249 16.5208C9.00249 16.7208 9.10249 17.0208 9.10249 17.3208L8.30249 23.3208L13.6024 20.3208C13.7024 20.2208 13.8024 20.2208 14.0024 20.2208Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_1045_1839">
-                          <rect
-                            width="28"
-                            height="28"
+                      <svg
+                        width="28"
+                        height="29"
+                        viewBox="0 0 28 29"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clipPath="url(#clip0_1045_1839)">
+                          <path
+                            d="M21.0024 26.2208C20.8024 26.2208 20.7024 26.2208 20.5024 26.1208L14.0024 22.4207L7.50249 26.1208C7.20249 26.3208 6.80249 26.3208 6.40249 26.1208C6.10249 25.9208 5.90249 25.5208 6.00249 25.1208L6.90249 17.6208L2.20249 12.9207C1.90249 12.6207 1.80249 12.2207 2.00249 11.9207C2.10249 11.5207 2.40249 11.3208 2.80249 11.2208L9.30249 10.3208L13.1024 3.72075C13.5024 3.12075 14.5024 3.12075 14.8024 3.72075L18.6024 10.3208L25.1024 11.2208C25.5024 11.3208 25.8024 11.5207 25.9024 11.9207C26.0024 12.3207 25.9024 12.7207 25.7024 12.9207L21.0024 17.6208L21.9024 25.1208C21.9024 25.5208 21.8024 25.8208 21.5024 26.1208C21.4024 26.1208 21.2024 26.2208 21.0024 26.2208ZM14.0024 20.2208C14.2024 20.2208 14.3024 20.2208 14.5024 20.3208L19.8024 23.3208L19.0024 17.3208C19.0024 17.0208 19.1024 16.7208 19.3024 16.5208L22.9024 12.9207L17.9024 12.2208C17.6024 12.2208 17.3024 12.0208 17.2024 11.7208L14.0024 6.22075L10.9024 11.7208C10.7024 12.0208 10.5024 12.2208 10.2024 12.2208L5.20249 12.9207L8.80249 16.5208C9.00249 16.7208 9.10249 17.0208 9.10249 17.3208L8.30249 23.3208L13.6024 20.3208C13.7024 20.2208 13.8024 20.2208 14.0024 20.2208Z"
                             fill="white"
-                            transform="translate(0 0.220703)"
                           />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1045_1839">
+                            <rect
+                              width="28"
+                              height="28"
+                              fill="white"
+                              transform="translate(0 0.220703)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
 
-                    <span> Favorite</span>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <svg
-                      width="28"
-                      height="29"
-                      viewBox="0 0 28 29"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                      <span> Favorite</span>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => {
+                        toggleFavorite()
+                        toast.error("Removed from favorite")
+                      }}
+                      className="flex flex-col items-center justify-center"
                     >
-                      <g clipPath="url(#clip0_1045_1926)">
-                        <path
-                          d="M20 25.2206H10C9.9 25.2206 9.8 25.2206 9.7 25.1206L3.7 23.1206C3.3 23.0206 3 22.6206 3 22.2206V13.2206C3 12.6206 3.4 12.2206 4 12.2206H8.5L12.1 7.7206L13 3.9206C13.1 3.5206 13.5 3.12061 14 3.12061H17C17.4 3.12061 17.7 3.3206 17.9 3.7206L18.9 5.7206C19 5.9206 19 6.0206 19 6.2206V9.2206C19 9.4206 19 9.52061 18.9 9.62061L17.6 12.2206H23C23.4 12.2206 23.8 12.5206 23.9 12.9206L24.9 15.9206C25 16.2206 25 16.4206 24.8 16.7206L20.8 24.7206C20.7 25.0206 20.4 25.2206 20 25.2206ZM10.2 23.2206H19.4L22.9 16.1206L22.3 14.2206H16C15.7 14.2206 15.3 14.0206 15.1 13.7206C14.9 13.4206 14.9 13.0206 15.1 12.7206L17 8.9206V6.4206L16.4 5.2206H14.8L14 8.4206C14 8.5206 13.9 8.7206 13.8 8.8206L9.8 13.8206C9.6 14.1206 9.3 14.2206 9 14.2206H5V21.5206L10.2 23.2206Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_1045_1926">
-                          <rect
-                            width="28"
-                            height="28"
-                            fill="white"
-                            transform="translate(0 0.220703)"
-                          />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                      </svg>
 
-                    <span>10.8K</span>
-                  </div>
-                  {/* <div className="flex flex-col items-center justify-center">
-                    <svg
-                      width="28"
-                      height="29"
-                      viewBox="0 0 28 29"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                      <span> Favorited</span>
+                    </div>
+                  )}
+
+                  {isLike ? (
+                    <div
+                      onClick={() => {
+                        toggleLike()
+                        toast.success("Liked this Game")
+                      }}
+                      className="flex flex-col items-center justify-center cursor-pointer"
                     >
-                      <g clipPath="url(#clip0_1045_2178)">
-                        <path
-                          d="M13.9969 25.2206H10.9969C10.5969 25.2206 10.2969 25.0206 10.0969 24.6206L9.09694 22.6206C8.99694 22.5206 8.99694 22.4206 8.99694 22.2206V19.2206C8.99694 19.0206 8.99694 18.9206 9.09694 18.8206L10.3969 16.2206H4.99694C4.59694 16.2206 4.19694 15.9206 4.09694 15.5206L3.09694 12.5206C2.99694 12.2206 2.99694 12.0206 3.19694 11.7206L7.19694 3.7206C7.39693 3.4206 7.69694 3.12061 8.09694 3.12061H18.0969C18.1969 3.12061 18.2969 3.1206 18.3969 3.2206L24.3969 5.2206C24.7969 5.3206 25.0969 5.72061 25.0969 6.12061V15.1206C25.0969 15.7206 24.6969 16.1206 24.0969 16.1206H19.5969L15.9969 20.6206L15.0969 24.4206C14.8969 24.9206 14.4969 25.2206 13.9969 25.2206ZM11.5969 23.2206H13.1969L13.9969 20.0206C13.9969 19.9206 14.0969 19.7206 14.1969 19.6206L18.1969 14.6206C18.3969 14.4206 18.6969 14.2206 18.9969 14.2206H22.9969V6.9206L17.7969 5.2206H8.59694L5.09694 12.3206L5.69694 14.2206H11.9969C12.2969 14.2206 12.6969 14.4206 12.8969 14.7206C13.0969 15.0206 13.0969 15.4206 12.8969 15.7206L10.9969 19.5206V22.0206L11.5969 23.2206Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_1045_2178">
-                          <rect
-                            width="28"
-                            height="28"
+                      <svg
+                        width="28"
+                        height="29"
+                        viewBox="0 0 28 29"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clipPath="url(#clip0_1045_1926)">
+                          <path
+                            d="M20 25.2206H10C9.9 25.2206 9.8 25.2206 9.7 25.1206L3.7 23.1206C3.3 23.0206 3 22.6206 3 22.2206V13.2206C3 12.6206 3.4 12.2206 4 12.2206H8.5L12.1 7.7206L13 3.9206C13.1 3.5206 13.5 3.12061 14 3.12061H17C17.4 3.12061 17.7 3.3206 17.9 3.7206L18.9 5.7206C19 5.9206 19 6.0206 19 6.2206V9.2206C19 9.4206 19 9.52061 18.9 9.62061L17.6 12.2206H23C23.4 12.2206 23.8 12.5206 23.9 12.9206L24.9 15.9206C25 16.2206 25 16.4206 24.8 16.7206L20.8 24.7206C20.7 25.0206 20.4 25.2206 20 25.2206ZM10.2 23.2206H19.4L22.9 16.1206L22.3 14.2206H16C15.7 14.2206 15.3 14.0206 15.1 13.7206C14.9 13.4206 14.9 13.0206 15.1 12.7206L17 8.9206V6.4206L16.4 5.2206H14.8L14 8.4206C14 8.5206 13.9 8.7206 13.8 8.8206L9.8 13.8206C9.6 14.1206 9.3 14.2206 9 14.2206H5V21.5206L10.2 23.2206Z"
                             fill="white"
-                            transform="translate(0 0.220703)"
                           />
-                        </clipPath>
-                      </defs>
-                    </svg>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1045_1926">
+                            <rect
+                              width="28"
+                              height="28"
+                              fill="white"
+                              transform="translate(0 0.220703)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
 
-                    <span>4.03K</span>
-                  </div> */}
-                  <div className="flex flex-col items-center justify-center">
+                      <span>10.8K</span>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => {
+                        toggleLike()
+                        toast.error("Unlike this Game")
+                      }}
+                      className="flex flex-col items-center justify-center cursor-pointer"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                      >
+                        <path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32a1 1 0 0 0-.29-.7L14.17 2 7.59 8.59A2 2 0 0 0 7 10v9a2 2 0 0 0 2 2h9c.82 0 1.54-.5 1.84-1.22L22.54 12.6c.29-.68.46-1.4.46-2.1v-.5l-.01-.5H23z" />
+                      </svg>
+
+                      <span>10.8K</span>
+                    </div>
+                  )}
+
+                  <div
+                    onClick={() => setShowModal(true)}
+                    className="flex flex-col items-center justify-center"
+                  >
                     <svg
                       width="28"
                       height="28"
@@ -289,6 +297,70 @@ export default function Homes({ params }) {
 
                     <span>Share</span>
                   </div>
+                  {showModal && (
+                    <>
+                      <div className="fixed inset-0 z-50 h-screen bg-[rgba(0,0,0,0.2)] flex justify-center items-center">
+                        <div className="bg-gradient-to-b from-[#6C3386] to-[#562357] p-6 rounded-xl w-[90%] max-w-md shadow-xl text-white">
+                          <h2 className="font-bebas-neue tracking-wider text-4xl font-normal mb-4">
+                            SHARE GAME
+                          </h2>
+
+                          <p className="mb-2 text-sm font-semibold">
+                            Game Link
+                          </p>
+                          <div className="flex">
+                            <input
+                              type="text"
+                              value={gameLink}
+                              readOnly
+                              className="flex-1 px-3 py-2 rounded-l-md bg-gradient-to-r from-gray-300 to-gray-400 text-black text-sm"
+                            />
+                            <button
+                              onClick={copyToClipboard}
+                              className="cursor-pointer px-4 bg-[#301852] text-white text-sm font-semibold rounded-r-md hover:bg-[#301852bd]"
+                            >
+                              {copied ? "Copied" : "Copy"}
+                            </button>
+                          </div>
+
+                          <hr className="my-5 border-gray-500" />
+
+                          <p className="text-center mb-3 text-sm">
+                            Share on Social Media
+                          </p>
+                          <div className="flex justify-center gap-4">
+                            <a
+                              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                                gameLink,
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-[#301852] rounded-lg hover:bg-[#301852bd] py-2 px-10 text-white text-sm"
+                            >
+                              Twitter
+                            </a>
+                            <a
+                              href={`https://discord.com/channels/@me`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-[#301852] rounded-lg hover:bg-[#301852bd] py-2 px-10 text-white text-sm"
+                            >
+                              Discord
+                            </a>
+                          </div>
+
+                          <div className="text-right mt-4">
+                            <button
+                              onClick={() => setShowModal(false)}
+                              className="text-sm text-white hover:underline"
+                            >
+                              Close
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

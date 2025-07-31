@@ -204,9 +204,9 @@ export default function RootSidebar() {
           </aside>
         </div>
       ) : (
-        <div className="scrollbar-hide fixed w-24 h-screen bg-[#2b0a59]  text-white z-50 overflow-y-auto mobile">
+        <div className="text-white scrollbar-hide  fixed w-[84px] h-screen bg-[#2b0a59] z-50 mobile">
           <aside className="w-full p-2 text-white flex flex-col">
-            <nav className="flex flex-col gap-2 flex-grow overflow-y-auto">
+            <nav className="flex flex-col gap-2 flex-grow overflow-hidden">
               {links.map(({ name, href, icon: Icon }) => (
                 <Link
                   key={name + "mobile"}
