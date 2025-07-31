@@ -107,6 +107,13 @@ const rewardData = [
 export default function Homes({ params }) {
   const router = useRouter()
   const { slug } = params
+  const { casinoSlots } = gamesData
+  const [showModal, setShowModal] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [isLike, setIsLike] = useState(false)
+  const [activeTab, setActiveTab] = useState("About")
+  const tabs = ["About"]
+
   const game = gamesData.casinoSlots.find(
     (g) =>
       g.title
@@ -114,54 +121,62 @@ export default function Homes({ params }) {
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9\-]/g, "") === slug,
   )
-  const { casinoSlots } = gamesData
 
   const recommendedGames = [...casinoSlots]
     .sort(() => 0.5 - Math.random())
     .slice(0, 5)
 
-  const [activeTab, setActiveTab] = useState("About")
 
-  const tabs = ["About"]
-
-  // const recommendedGames = [
-  //   {
-  //     img: r1,
-  //     title: `[NightFury Remodel] Rise of`,
-  //     rating: "91%",
-  //     user_play: "245",
-  //   },
-  //   {
-  //     img: r2,
-  //     title: "How to Train Your Dragon",
-  //     rating: "72%",
-  //     user_play: "387",
-  //   },
-  //   {
-  //     img: r3,
-  //     title: "Steal a Brainrot",
-  //     rating: "90%",
-  //     user_play: "710k",
-  //   },
-  //   {
-  //     img: r4,
-  //     title: "99 Nights in the Forest [ALIENS]",
-  //     rating: "91%",
-  //     user_play: "1.1m",
-  //   },
-  //   // {
-  //   //   img: r5,
-  //   //   title: "Grow a Garden",
-  //   //   rating: "93%",
-  //   //   user_play: "2.3m",
-  //   // },
-  //   // {
-  //   //   img: r6,
-  //   //   title: "Pocket Dragons",
-  //   //   rating: "96%",
-  //   //   user_play: "9bd",
-  //   // },
-  // ]
+    const copyToClipboard = () => {
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        navigator.clipboard
+          .writeText(gameLink)
+          .then(() => {
+            setCopied(true)
+            toast.success("Link copied!")
+            setTimeout(() => setCopied(false), 2000)
+          })
+          .catch((err) => {
+            toast.error("Failed to copy link")
+            console.error("Clipboard error:", err)
+          })
+      } else {
+        toast.error("Clipboard not supported")
+      }
+    }
+  
+    useEffect(() => {
+      const gameId = game?.id
+      if (!gameId) return
+  
+      const likeStorage = JSON.parse(localStorage.getItem("likeStatus") || "{}")
+      const favoriteStorage = JSON.parse(
+        localStorage.getItem("favoriteStatus") || "{}",
+      )
+  
+      setIsLike(likeStorage[gameId] || false)
+      setIsFavorite(favoriteStorage[gameId] || false)
+    }, [game?.id])
+  
+    const toggleFavorite = () => {
+      const gameId = game?.id
+      if (!gameId) return
+      const favorites = JSON.parse(localStorage.getItem("favoriteStatus") || "{}")
+      const newStatus = !favorites[gameId]
+      favorites[gameId] = newStatus
+      localStorage.setItem("favoriteStatus", JSON.stringify(favorites))
+      setIsFavorite(newStatus)
+    }
+  
+    const toggleLike = () => {
+      const gameId = game?.id
+      if (!gameId) return
+      const likes = JSON.parse(localStorage.getItem("likeStatus") || "{}")
+      const newStatus = !likes[gameId]
+      likes[gameId] = newStatus
+      localStorage.setItem("likeStatus", JSON.stringify(likes))
+      setIsLike(newStatus)
+    }
 
   const stats = [
     { label: "Active", value: "2,421" },
@@ -221,7 +236,7 @@ export default function Homes({ params }) {
                 <h1 className="text-2xl md:text-3xl font-bold mb-3">
                   {game.title}
                 </h1>
-                <p className="text-sm opacity-90">
+                <p className="opacity-90">
                   By Vegas Casino Studios <span className="mx-1">/</span> <br />{" "}
                   Maturity: 18+ <span className="mx-1">•</span> Develop by Big
                   Time Universe
@@ -238,21 +253,218 @@ export default function Homes({ params }) {
                 >
                   PLAY NOW
                 </a>
+                <div className="flex gap-3 mt-2 text-sm cursor-pointer h-[49px] mt-4">
+                  {!isFavorite ? (
+                    <div
+                      onClick={() => {
+                        toggleFavorite()
+                        toast.success("Add To Favorite")
+                      }}
+                      className="flex flex-col items-center justify-center"
+                    >
+                      <svg
+                        width="28"
+                        height="29"
+                        viewBox="0 0 28 29"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clipPath="url(#clip0_1045_1839)">
+                          <path
+                            d="M21.0024 26.2208C20.8024 26.2208 20.7024 26.2208 20.5024 26.1208L14.0024 22.4207L7.50249 26.1208C7.20249 26.3208 6.80249 26.3208 6.40249 26.1208C6.10249 25.9208 5.90249 25.5208 6.00249 25.1208L6.90249 17.6208L2.20249 12.9207C1.90249 12.6207 1.80249 12.2207 2.00249 11.9207C2.10249 11.5207 2.40249 11.3208 2.80249 11.2208L9.30249 10.3208L13.1024 3.72075C13.5024 3.12075 14.5024 3.12075 14.8024 3.72075L18.6024 10.3208L25.1024 11.2208C25.5024 11.3208 25.8024 11.5207 25.9024 11.9207C26.0024 12.3207 25.9024 12.7207 25.7024 12.9207L21.0024 17.6208L21.9024 25.1208C21.9024 25.5208 21.8024 25.8208 21.5024 26.1208C21.4024 26.1208 21.2024 26.2208 21.0024 26.2208ZM14.0024 20.2208C14.2024 20.2208 14.3024 20.2208 14.5024 20.3208L19.8024 23.3208L19.0024 17.3208C19.0024 17.0208 19.1024 16.7208 19.3024 16.5208L22.9024 12.9207L17.9024 12.2208C17.6024 12.2208 17.3024 12.0208 17.2024 11.7208L14.0024 6.22075L10.9024 11.7208C10.7024 12.0208 10.5024 12.2208 10.2024 12.2208L5.20249 12.9207L8.80249 16.5208C9.00249 16.7208 9.10249 17.0208 9.10249 17.3208L8.30249 23.3208L13.6024 20.3208C13.7024 20.2208 13.8024 20.2208 14.0024 20.2208Z"
+                            fill="white"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1045_1839">
+                            <rect
+                              width="28"
+                              height="28"
+                              fill="white"
+                              transform="translate(0 0.220703)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
 
-                <div className="mt-4 flex gap-6 text-xs opacity-90">
-                  <span className="flex flex-col justify-center items-center gap-1">
-                    <Star size={24} /> Favorites
-                  </span>
-                  <span className="flex flex-col justify-center items-center gap-1">
-                    <ThumbsUp size={24} /> 10K+
-                  </span>
-                  {/* <span className="flex flex-col justify-center items-center gap-1">
-                    <Eye size={24} /> 4.89B
-                  </span> */}
-                  <span className="flex flex-col justify-center items-center gap-1">
-                    <Share2 size={24} /> Shares
-                  </span>
+                      <span> Favorite</span>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => {
+                        toggleFavorite()
+                        toast.error("Removed from favorite")
+                      }}
+                      className="flex flex-col items-center justify-center"
+                    >
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                      </svg>
+
+                      <span> Favorited</span>
+                    </div>
+                  )}
+
+                  {isLike ? (
+                    <div
+                      onClick={() => {
+                        toggleLike()
+                        toast.success("Liked this Game")
+                      }}
+                      className="flex flex-col items-center justify-center cursor-pointer"
+                    >
+                      <svg
+                        width="28"
+                        height="29"
+                        viewBox="0 0 28 29"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clipPath="url(#clip0_1045_1926)">
+                          <path
+                            d="M20 25.2206H10C9.9 25.2206 9.8 25.2206 9.7 25.1206L3.7 23.1206C3.3 23.0206 3 22.6206 3 22.2206V13.2206C3 12.6206 3.4 12.2206 4 12.2206H8.5L12.1 7.7206L13 3.9206C13.1 3.5206 13.5 3.12061 14 3.12061H17C17.4 3.12061 17.7 3.3206 17.9 3.7206L18.9 5.7206C19 5.9206 19 6.0206 19 6.2206V9.2206C19 9.4206 19 9.52061 18.9 9.62061L17.6 12.2206H23C23.4 12.2206 23.8 12.5206 23.9 12.9206L24.9 15.9206C25 16.2206 25 16.4206 24.8 16.7206L20.8 24.7206C20.7 25.0206 20.4 25.2206 20 25.2206ZM10.2 23.2206H19.4L22.9 16.1206L22.3 14.2206H16C15.7 14.2206 15.3 14.0206 15.1 13.7206C14.9 13.4206 14.9 13.0206 15.1 12.7206L17 8.9206V6.4206L16.4 5.2206H14.8L14 8.4206C14 8.5206 13.9 8.7206 13.8 8.8206L9.8 13.8206C9.6 14.1206 9.3 14.2206 9 14.2206H5V21.5206L10.2 23.2206Z"
+                            fill="white"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_1045_1926">
+                            <rect
+                              width="28"
+                              height="28"
+                              fill="white"
+                              transform="translate(0 0.220703)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+
+                      <span>10.8K</span>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => {
+                        toggleLike()
+                        toast.error("Unlike this Game")
+                      }}
+                      className="flex flex-col items-center justify-center cursor-pointer"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                      >
+                        <path d="M1 21h4V9H1v12zM23 10c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32a1 1 0 0 0-.29-.7L14.17 2 7.59 8.59A2 2 0 0 0 7 10v9a2 2 0 0 0 2 2h9c.82 0 1.54-.5 1.84-1.22L22.54 12.6c.29-.68.46-1.4.46-2.1v-.5l-.01-.5H23z" />
+                      </svg>
+
+                      <span>10.8K</span>
+                    </div>
+                  )}
+
+                  <div
+                    onClick={() => setShowModal(true)}
+                    className="flex flex-col items-center justify-center"
+                  >
+                    <svg
+                      width="28"
+                      height="28"
+                      viewBox="0 0 28 28"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10.4974 13.9999C10.4974 14.7735 10.1901 15.5153 9.64312 16.0623C9.09614 16.6093 8.35428 16.9166 7.58073 16.9166C6.80718 16.9166 6.06532 16.6093 5.51833 16.0623C4.97135 15.5153 4.66406 14.7735 4.66406 13.9999C4.66406 13.2264 4.97135 12.4845 5.51833 11.9375C6.06532 11.3905 6.80718 11.0833 7.58073 11.0833C8.35428 11.0833 9.09614 11.3905 9.64312 11.9375C10.1901 12.4845 10.4974 13.2264 10.4974 13.9999Z"
+                        stroke="white"
+                        strokeWidth="1.5"
+                      />
+                      <path
+                        d="M16.3333 7.58325L10.5 11.6666M16.3333 20.4166L10.5 16.3333"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M22.1615 21.5833C22.1615 22.3569 21.8542 23.0987 21.3072 23.6457C20.7602 24.1927 20.0183 24.5 19.2448 24.5C18.4712 24.5 17.7294 24.1927 17.1824 23.6457C16.6354 23.0987 16.3281 22.3569 16.3281 21.5833C16.3281 20.8098 16.6354 20.0679 17.1824 19.5209C17.7294 18.974 18.4712 18.6667 19.2448 18.6667C20.0183 18.6667 20.7602 18.974 21.3072 19.5209C21.8542 20.0679 22.1615 20.8098 22.1615 21.5833ZM22.1615 6.41667C22.1615 7.19021 21.8542 7.93208 21.3072 8.47906C20.7602 9.02604 20.0183 9.33333 19.2448 9.33333C18.4712 9.33333 17.7294 9.02604 17.1824 8.47906C16.6354 7.93208 16.3281 7.19021 16.3281 6.41667C16.3281 5.64312 16.6354 4.90125 17.1824 4.35427C17.7294 3.80729 18.4712 3.5 19.2448 3.5C20.0183 3.5 20.7602 3.80729 21.3072 4.35427C21.8542 4.90125 22.1615 5.64312 22.1615 6.41667Z"
+                        stroke="white"
+                        strokeWidth="1.5"
+                      />
+                    </svg>
+
+                    <span>Share</span>
+                  </div>
+                  {showModal && (
+                    <>
+                      <div className="fixed inset-0 z-50 h-screen bg-[rgba(0,0,0,0.2)] flex justify-center items-center">
+                        <div className="bg-gradient-to-b from-[#6C3386] to-[#562357] p-6 rounded-xl w-[90%] max-w-md shadow-xl text-white">
+                          <h2 className="font-bebas-neue tracking-wider text-4xl font-normal mb-4">
+                            SHARE GAME
+                          </h2>
+
+                          <p className="mb-2 text-sm font-semibold">
+                            Game Link
+                          </p>
+                          <div className="flex">
+                            <input
+                              type="text"
+                              value={gameLink}
+                              readOnly
+                              className="flex-1 px-3 py-2 rounded-l-md bg-gradient-to-r from-gray-300 to-gray-400 text-black text-sm"
+                            />
+                            <button
+                              onClick={copyToClipboard}
+                              className="cursor-pointer px-4 bg-[#301852] text-white text-sm font-semibold rounded-r-md hover:bg-[#301852bd]"
+                            >
+                              {copied ? "Copied" : "Copy"}
+                            </button>
+                          </div>
+
+                          <hr className="my-5 border-gray-500" />
+
+                          <p className="text-center mb-3 text-sm">
+                            Share on Social Media
+                          </p>
+                          <div className="flex justify-center gap-4">
+                            <a
+                              href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                                gameLink,
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-[#301852] rounded-lg hover:bg-[#301852bd] py-2 px-10 text-white text-sm"
+                            >
+                              Twitter
+                            </a>
+                            <a
+                              href={`https://discord.com/channels/@me`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-[#301852] rounded-lg hover:bg-[#301852bd] py-2 px-10 text-white text-sm"
+                            >
+                              Discord
+                            </a>
+                          </div>
+
+                          <div className="text-right mt-4">
+                            <button
+                              onClick={() => setShowModal(false)}
+                              className="text-sm text-white hover:underline"
+                            >
+                              Close
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
+               
               </div>
             </div>
           </div>

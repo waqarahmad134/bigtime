@@ -14,7 +14,6 @@ export default function Homes({ params }) {
   const [showModal, setShowModal] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLike, setIsLike] = useState(false)
-  console.log("🚀 ~ Homes ~ isLike:", isLike)
   const [searchQuery, setSearchQuery] = useState("")
   const [active, setActive] = useState("Home")
 
