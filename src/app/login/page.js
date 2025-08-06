@@ -25,11 +25,12 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
+    
     const token = localStorage.getItem("accessToken");
     const rememberedEmail = localStorage.getItem("rememberedEmail");
 
     if (token) {
-      router.push("/home1");
+      router.push("/newhome");
     }
 
     if (rememberedEmail) {
@@ -68,7 +69,7 @@ export default function LoginPage() {
         }
 
         if(data.role == "user"){
-          router.push("/home1");
+          router.push("/home");
         }else{
           router.push("/bigtimeadmin");
         }

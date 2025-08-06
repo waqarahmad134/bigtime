@@ -12,14 +12,7 @@ import {
   Gamepad2,
 } from "lucide-react"
 import bgImageWallet from "@/assets/Images/referralbg.png"
-import legend from "@/assets/Images/home1/legend.jpg"
-import migrane from "@/assets/Images/home1/migrane.png"
-import king from "@/assets/Images/home1/king.png"
-import fire from "@/assets/Images/home1/fire.jpg"
-import pyramid from "@/assets/Images/home1/pyramid.jpg"
-import twist from "@/assets/Images/home1/twist.jpg"
-import professor from "@/assets/Images/home1/professor.png"
-import party from "@/assets/Images/home1/party.jpg"
+
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import gamesData from "@/app/games.json"

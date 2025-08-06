@@ -1,13 +1,28 @@
 "use client"
-import { usePathname } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { SidebarProvider } from "@/context/SidebarContext"
 import LayoutContent from "@/components/LayoutContent"
+import { useEffect } from "react"
 
 export default function LayoutWrapper({ children }) {
+  const router = useRouter()
   const pathname = usePathname()
-  const excludedPrefixes = ["/", "/login", "/otp", "/signup" , "/gameinfo"]
+
+  const excludedPrefixes = ["/", "/login", "/otp", "/signup", "/gameinfo"]
   const isExcluded =
     excludedPrefixes.includes(pathname) || pathname.startsWith("/bigtimeadmin")
+
+  useEffect(() => {
+    const role = localStorage.getItem("role")
+    if (pathname === "/home" && role === "admin") {
+      router.replace("/newhome")
+    }
+    if(role === "user"){
+      router.replace("/home")
+    }
+
+    console.log("role" , role , "from layout")
+  }, [pathname, router])
 
   if (isExcluded) {
     return <>{children}</>

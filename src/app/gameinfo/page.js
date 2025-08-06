@@ -151,7 +151,7 @@ export default function Homes() {
       <div className="max-w-5xl m-auto">
         <div className="w-full relative">
           <button
-            onClick={() => router.push("/home1")}
+            onClick={() => router.push("/newhome")}
             className="absolute top-3 z-10 left-3 cursor-pointer bg-[#301852] rounded-xl px-3 py-2 text-white flex items-center justify-center gap-1"
           >
             <svg
