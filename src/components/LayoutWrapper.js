@@ -17,7 +17,7 @@ export default function LayoutWrapper({ children }) {
     if (pathname === "/home" && role === "admin") {
       router.replace("/newhome")
     }
-    if(role === "user"){
+    if(pathname === "/newhome" && role === "user"){
       router.replace("/home")
     }
 

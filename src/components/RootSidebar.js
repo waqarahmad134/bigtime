@@ -12,9 +12,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
-// import Discount from "@/components/Discount"
-// import FriendsOnline from "@/components/FriendsOnline"
-// import RecentlyPlayed from "@/components/RecentlyPlayed"
 import { useSidebar } from "@/context/SidebarContext"
 
 const HouseIcon = () => (
