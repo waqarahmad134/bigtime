@@ -93,13 +93,7 @@ export default function TokenWalletPage() {
 
   return (
     <div className="relative min-h-screen pb-10">
-      <Image
-        src={bgImageWallet}
-        alt="Background Desktop"
-        fill
-        className="object-cover pointer-events-none select-none -z-10 "
-        priority
-      />
+      
       <div className="container m-auto text-white p-6">
         <div className="mt-3 mb-5">
           <h2 className="font-bebas-neue tracking-wide text-5xl">

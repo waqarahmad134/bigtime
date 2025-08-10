@@ -13,6 +13,7 @@ import {
 import Link from "next/link"
 import { useState } from "react"
 import { useSidebar } from "@/context/SidebarContext"
+import { useRouting } from "@/context/RoutingContext"
 
 const HouseIcon = () => (
   <svg
@@ -155,6 +156,7 @@ const Community = (props) => {
 
 export default function RootSidebar() {
   const { isSidebarOpen } = useSidebar()
+  const { navigateWithLoading } = useRouting()
   const [active, setActive] = useState("Home")
 
   const links = [
@@ -177,11 +179,11 @@ export default function RootSidebar() {
           <aside className="w-full p-4 text-white flex flex-col">
             <nav className="flex flex-col gap-2 flex-grow overflow-y-auto">
               {links?.map(({ name, href, icon: Icon }) => (
-                <Link
+                <button
                   key={name}
-                  href={href}
                   onClick={() => {
                     setActive(name)
+                    navigateWithLoading(href)
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded transition-all ${
                     active === name
@@ -192,7 +194,7 @@ export default function RootSidebar() {
                   <Icon />
                   {/* <Icon size={20} /> */}
                   <span className="text-sm">{name}</span>
-                </Link>
+                </button>
               ))}
             </nav>
             {/* <Discount />
@@ -205,11 +207,11 @@ export default function RootSidebar() {
           <aside className="w-full p-2 text-white flex flex-col">
             <nav className="flex flex-col gap-2 flex-grow overflow-hidden">
               {links.map(({ name, href, icon: Icon }) => (
-                <Link
+                <button
                   key={name + "mobile"}
-                  href={href}
                   onClick={() => {
                     setActive(name)
+                    navigateWithLoading(href)
                   }}
                   className={`flex flex-col items-center gap-1 p-2 rounded transition-all `}
                 >
@@ -218,7 +220,7 @@ export default function RootSidebar() {
 
                   {name}
                   </p>
-                </Link>
+                </button>
               ))}
             </nav>
           </aside>

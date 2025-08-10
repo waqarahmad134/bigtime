@@ -25,6 +25,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+button{
+  cursor: pointer;
+}
+
 /* Font Classes */
 .font-bebas-neue {
   font-family: var(--font-bebas-neue);

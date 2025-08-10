@@ -1,14 +1,16 @@
 "use client"
 import { useRouter, usePathname } from "next/navigation"
 import { SidebarProvider } from "@/context/SidebarContext"
+import { RoutingProvider, useRouting } from "@/context/RoutingContext"
 import LayoutContent from "@/components/LayoutContent"
+import LoadingSpinner from "@/components/LoadingSpinner"
 import { useEffect } from "react"
 
 export default function LayoutWrapper({ children }) {
   const router = useRouter()
   const pathname = usePathname()
 
-  const excludedPrefixes = ["/", "/login", "/otp", "/signup", "/gameinfo"]
+  const excludedPrefixes = ["/", "/login", "/otp", "/signup"]
   const isExcluded =
     excludedPrefixes.includes(pathname) || pathname.startsWith("/bigtimeadmin")
 
@@ -25,12 +27,40 @@ export default function LayoutWrapper({ children }) {
   }, [pathname, router])
 
   if (isExcluded) {
-    return <>{children}</>
+    return (
+      <RoutingProvider>
+        <LoadingSpinnerWrapper>
+          {children}
+        </LoadingSpinnerWrapper>
+      </RoutingProvider>
+    )
   }
 
   return (
-    <SidebarProvider>
-      <LayoutContent>{children}</LayoutContent>
-    </SidebarProvider>
+    <RoutingProvider>
+      <SidebarProvider>
+        <LoadingSpinnerWrapper>
+          <LayoutContent>{children}</LayoutContent>
+        </LoadingSpinnerWrapper>
+      </SidebarProvider>
+    </RoutingProvider>
+  )
+}
+
+// Separate component to handle loading spinner
+function LoadingSpinnerWrapper({ children }) {
+  const { isLoading, loadingMessage, loadingSubtitle, loaderType } = useRouting()
+  
+  return (
+    <>
+      {isLoading && (
+        <LoadingSpinner 
+          type={loaderType}
+          message={loadingMessage}
+          subtitle={loadingSubtitle}
+        />
+      )}
+      {children}
+    </>
   )
 }

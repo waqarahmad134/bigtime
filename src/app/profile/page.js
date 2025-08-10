@@ -1,10 +1,27 @@
 "use client"
-
-import { useEffect, useState } from "react"
+import { useRef, useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import avatar from "@/assets/Images/rocketleague.png"
 import bgImageWallet from "@/assets/Images/referralbg.png"
 import Link from "next/link"
+
+// Animation variants for staggered lists
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+}
+
 export default function Layout({ children }) {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
   const [profileData, setProfileData] = useState(null)
@@ -101,48 +118,65 @@ export default function Layout({ children }) {
   const tabs = ["profile", "achievements", "inventory", "settings"]
 
   return (
-    <div className="relative min-h-screen flex flex-col pb-10">
-      <Image
-        src={bgImageWallet}
-        alt="Background Desktop"
-        fill
-        className="object-cover pointer-events-none select-none -z-10 block"
-        priority
-      />
-
-      <div className="min-h-screen  text-white p-6">
-        <section className="w-full  px-4 sm:px-8">
-          <h2 className="font-bebas-neue tracking-wider text-center text-xl sm:text-5xl font-extrabold mb-2 text-white">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+      className="relative container m-auto pb-10"
+    >
+      <div className="min-h-screen text-white p-6">
+        <section className="w-full px-4 sm:px-8">
+          <motion.h2
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="font-bebas-neue tracking-wider text-center text-xl sm:text-5xl font-extrabold mb-2 text-white"
+          >
             Profile & Avatar
-          </h2>
+          </motion.h2>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 my-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex flex-col sm:flex-row justify-center items-center gap-2 my-8"
+          >
             {tabs.map((tab) => (
-              <button
+              <motion.button
                 key={tab}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 capitalize w-[120px] rounded-lg cursor-pointer text-sm font-semibold transition-all duration-300
-            ${
-              activeTab === tab
-                ? "bg-[#8A2BE2] text-white"
-                : "bg-[#3B206366] text-gray-300 hover:bg-[#9333EA] hover:text-white"
-            }
-          `}
+                  ${
+                    activeTab === tab
+                      ? "bg-[#8A2BE2] text-white"
+                      : "bg-[#3B206366] text-gray-300 hover:bg-[#9333EA] hover:text-white"
+                  }
+                `}
               >
                 {tab}
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-12 gap-4 max-w-7xl mx-auto">
-            <div className="col-span-3">
+            {/* Left Sidebar */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="col-span-12 lg:col-span-3"
+            >
               <div className="bg-[#301852] border border-[#301852] rounded-xl p-5">
                 <div className="relative z-10 flex flex-col items-center text-white">
                   {/* Profile Image and Level */}
                   <div className="relative flex-shrink-0 mb-6">
-                    <img
+                    <Image
                       src="https://placehold.co/80x80/8A2BE2/FFFFFF?text=User"
                       alt="User Avatar"
+                      width={80}
+                      height={80}
                       className="w-20 h-20 rounded-full border-4 border-purple-400 object-cover shadow-lg"
                     />
                     <div className="absolute bottom-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md transform translate-x-1/4 translate-y-1/4">
@@ -155,10 +189,12 @@ export default function Layout({ children }) {
                     {profileData?.username}
                   </h1>
                   <div className="w-full bg-purple-600 rounded-full h-2.5 mb-2">
-                    <div
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: "75%" }}
+                      transition={{ duration: 1, delay: 0.8 }}
                       className="bg-blue-400 h-2.5 rounded-full"
-                      style={{ width: "75%" }}
-                    ></div>
+                    ></motion.div>
                   </div>
                   <p className="text-purple-300 text-sm mb-6">
                     7,500 / 10,000 XP
@@ -169,20 +205,25 @@ export default function Layout({ children }) {
                     <h2 className="text-purple-200 text-lg font-semibold mb-3">
                       Quick Stats
                     </h2>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
+                    <motion.div
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="space-y-2"
+                    >
+                      <motion.div variants={itemVariants} className="flex justify-between items-center">
                         <p className="text-purple-300">Battles Won</p>
                         <p className="text-blue-300 font-medium">1,247</p>
-                      </div>
-                      <div className="flex justify-between items-center">
+                      </motion.div>
+                      <motion.div variants={itemVariants} className="flex justify-between items-center">
                         <p className="text-purple-300">Achievements</p>
                         <p className="text-yellow-300 font-medium">89</p>
-                      </div>
-                      <div className="flex justify-between items-center">
+                      </motion.div>
+                      <motion.div variants={itemVariants} className="flex justify-between items-center">
                         <p className="text-purple-300">Rank</p>
                         <p className="text-pink-300 font-medium">Diamond</p>
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   </div>
 
                   {/* Friends Online Section */}
@@ -190,33 +231,48 @@ export default function Layout({ children }) {
                     <h2 className="text-white text-lg font-semibold mb-4">
                       Friends ({friendsData?.length || "0"})
                     </h2>
-                    {friendsData?.map((data, index) => (
-                      <div className="space-y-3" key={data.id || index}>
-                        <div className="flex items-center">
-                          <img
+                    <motion.div
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="space-y-3"
+                    >
+                      {friendsData?.map((data, index) => (
+                        <motion.div variants={itemVariants} className="flex items-center" key={data.id || index}>
+                          <Image
                             src="https://placehold.co/32x32/4A0E4B/FFFFFF?text=S"
                             alt="StarCrusher"
+                            width={32}
+                            height={32}
                             className="w-8 h-8 rounded-full mr-3 object-cover"
                           />
                           <p className="text-white flex-grow">
                             {data.friend_username}
                           </p>
-                          {/* <div className="w-2 h-2 bg-green-500 rounded-full"></div> */}
-                        </div>
-                      </div>
-                    ))}
+                        </motion.div>
+                      ))}
+                    </motion.div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-span-9">
-              <div className="bg-[#301852] border border-[#301852] rounded-xl p-5">
+            </motion.div>
+
+            {/* Main Content Area */}
+            <div className="col-span-12 lg:col-span-9">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="bg-[#301852] border border-[#301852] rounded-xl p-5"
+              >
                 <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                   {/* Profile Image and Level */}
                   <div className="relative flex-shrink-0">
-                    <img
+                    <Image
                       src="https://placehold.co/120x120/8A2BE2/FFFFFF?text=User"
                       alt="User Avatar"
+                      width={120}
+                      height={120}
                       className="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-purple-400 object-cover shadow-lg"
                     />
                     <div className="absolute bottom-0 right-0 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md transform translate-x-1/4 translate-y-1/4">
@@ -237,8 +293,13 @@ export default function Layout({ children }) {
                     </p>
 
                     {/* Badges/Icons */}
-                    <div className="flex justify-center md:justify-start space-x-3 mb-6">
-                      <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                    <motion.div
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="flex justify-center md:justify-start space-x-3 mb-6"
+                    >
+                      <motion.div whileHover={{ scale: 1.1 }} variants={itemVariants} className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-md">
                         <svg
                           className="w-6 h-6 text-purple-200"
                           fill="currentColor"
@@ -250,8 +311,8 @@ export default function Layout({ children }) {
                             clipRule="evenodd"
                           />
                         </svg>
-                      </div>
-                      <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                      </motion.div>
+                      <motion.div whileHover={{ scale: 1.1 }} variants={itemVariants} className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-md">
                         <svg
                           className="w-6 h-6 text-purple-200"
                           fill="currentColor"
@@ -259,8 +320,8 @@ export default function Layout({ children }) {
                         >
                           <path d="M11.085 19.085a2 2 0 01-2.17 0L1 10.915V1a1 1 0 011-1h16a1 1 0 011 1v9.915l-7.915 8.17zM10 16.5l-5-5V4h10v7.5l-5 5z" />
                         </svg>
-                      </div>
-                      <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                      </motion.div>
+                      <motion.div whileHover={{ scale: 1.1 }} variants={itemVariants} className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center shadow-md">
                         <svg
                           className="w-6 h-6 text-purple-200"
                           fill="currentColor"
@@ -272,12 +333,16 @@ export default function Layout({ children }) {
                             clipRule="evenodd"
                           />
                         </svg>
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
 
                     {/* Action Buttons */}
                     <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-8">
-                      <button className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                      >
                         <svg
                           className="w-4 h-4 mr-2"
                           fill="currentColor"
@@ -286,8 +351,12 @@ export default function Layout({ children }) {
                           <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zm-9.192 7.778l-1.414 1.414a2 2 0 000 2.828l5.657 5.657a2 2 0 002.828 0l1.414-1.414L10.586 15l-7.071-7.071z" />
                         </svg>
                         Edit Profile
-                      </button>
-                      <button className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-purple-800 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-purple-800 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                      >
                         <svg
                           className="w-4 h-4 mr-2"
                           fill="currentColor"
@@ -300,8 +369,12 @@ export default function Layout({ children }) {
                           />
                         </svg>
                         Share Profile
-                      </button>
-                      <button className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-purple-800 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-purple-800 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                      >
                         <svg
                           className="w-4 h-4 mr-2"
                           fill="currentColor"
@@ -314,8 +387,12 @@ export default function Layout({ children }) {
                           />
                         </svg>
                         Add Friend
-                      </button>
-                      <button className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-purple-800 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center px-5 py-2 bg-[#3B82F6] hover:bg-purple-800 text-white text-sm font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+                      >
                         <svg
                           className="w-4 h-4 mr-2"
                           fill="currentColor"
@@ -328,33 +405,48 @@ export default function Layout({ children }) {
                           />
                         </svg>
                         Message
-                      </button>
+                      </motion.button>
                     </div>
                     <div className="space-y-4 md:space-y-0 md:space-x-4 ">
-                      <Link
-                        href="/leaderboard"
-                        className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
-                      >
-                        Leaderboard
+                      <Link href="/leaderboard">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Leaderboard
+                        </motion.button>
                       </Link>
-                      <Link
-                        href="/shop"
-                        className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
-                      >
-                        Shop
+                      <Link href="/shop">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Shop
+                        </motion.button>
                       </Link>
-                      <Link
-                        href="/tournaments"
-                        className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
-                      >
-                        Tournaments
+                      <Link href="/tournaments">
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-full md:w-auto px-8 py-3 bg-[#3B206336] border boder-[#FFFFFF1A] text-white text-lg rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                        >
+                          Tournaments
+                        </motion.button>
                       </Link>
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="bg-[#301852] border border-[#301852] rounded-xl overflow-hidden p-10 my-5">
+              {/* Dynamic Content Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                className="bg-[#301852] border border-[#301852] rounded-xl overflow-hidden p-10 my-5"
+              >
                 {activeTab == "profile" ? (
                   <div className="relative z-10">
                     <h2 className="text-white text-xl md:text-2xl font-bold mb-4">
@@ -365,9 +457,17 @@ export default function Layout({ children }) {
                     </p>
 
                     {/* Activity List */}
-                    <div className="space-y-4">
+                    <motion.div
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="space-y-4"
+                    >
                       {/* Activity Item 1 */}
-                      <div className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md">
+                      <motion.div
+                        variants={itemVariants}
+                        className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md"
+                      >
                         <div className="w-8 h-8 flex-shrink-0 rounded-full bg-green-500 flex items-center justify-center mr-4">
                           <svg
                             className="w-5 h-5 text-white"
@@ -387,10 +487,13 @@ export default function Layout({ children }) {
                           </p>
                           <p className="text-purple-300 text-sm">2 hours ago</p>
                         </div>
-                      </div>
+                      </motion.div>
 
                       {/* Activity Item 2 */}
-                      <div className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md">
+                      <motion.div
+                        variants={itemVariants}
+                        className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md"
+                      >
                         <div className="w-8 h-8 flex-shrink-0 rounded-full bg-yellow-500 flex items-center justify-center mr-4">
                           <svg
                             className="w-5 h-5 text-white"
@@ -406,10 +509,13 @@ export default function Layout({ children }) {
                           </p>
                           <p className="text-purple-300 text-sm">1 day ago</p>
                         </div>
-                      </div>
+                      </motion.div>
 
                       {/* Activity Item 3 */}
-                      <div className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md">
+                      <motion.div
+                        variants={itemVariants}
+                        className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md"
+                      >
                         <div className="w-8 h-8 flex-shrink-0 rounded-full bg-orange-500 flex items-center justify-center mr-4">
                           <svg
                             className="w-5 h-5 text-white"
@@ -429,8 +535,8 @@ export default function Layout({ children }) {
                           </p>
                           <p className="text-purple-300 text-sm">3 days ago</p>
                         </div>
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   </div>
                 ) : activeTab == "achievements" ? (
                   <div className="relative z-10">
@@ -442,9 +548,17 @@ export default function Layout({ children }) {
                     </p>
 
                     {/* Activity List */}
-                    <div className="space-y-4">
+                    <motion.div
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="space-y-4"
+                    >
                       {/* Activity Item 1 */}
-                      <div className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md">
+                      <motion.div
+                        variants={itemVariants}
+                        className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md"
+                      >
                         <div className="w-8 h-8 flex-shrink-0 rounded-full bg-green-500 flex items-center justify-center mr-4">
                           <svg
                             className="w-5 h-5 text-white"
@@ -464,10 +578,13 @@ export default function Layout({ children }) {
                           </p>
                           <p className="text-purple-300 text-sm">2 hours ago</p>
                         </div>
-                      </div>
+                      </motion.div>
 
                       {/* Activity Item 2 */}
-                      <div className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md">
+                      <motion.div
+                        variants={itemVariants}
+                        className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md"
+                      >
                         <div className="w-8 h-8 flex-shrink-0 rounded-full bg-yellow-500 flex items-center justify-center mr-4">
                           <svg
                             className="w-5 h-5 text-white"
@@ -483,10 +600,13 @@ export default function Layout({ children }) {
                           </p>
                           <p className="text-purple-300 text-sm">1 day ago</p>
                         </div>
-                      </div>
+                      </motion.div>
 
                       {/* Activity Item 3 */}
-                      <div className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md">
+                      <motion.div
+                        variants={itemVariants}
+                        className="flex items-center bg-purple-800/50 p-4 rounded-lg shadow-md"
+                      >
                         <div className="w-8 h-8 flex-shrink-0 rounded-full bg-orange-500 flex items-center justify-center mr-4">
                           <svg
                             className="w-5 h-5 text-white"
@@ -506,11 +626,16 @@ export default function Layout({ children }) {
                           </p>
                           <p className="text-purple-300 text-sm">3 days ago</p>
                         </div>
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   </div>
                 ) : activeTab == "inventory" ? (
-                  <div className="overflow-hidden">
+                  <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="overflow-hidden"
+                  >
                     <div className="relative z-10 text-white">
                       <h2 className="text-xl md:text-2xl font-bold mb-2">
                         INVENTORY SYSTEM
@@ -521,7 +646,11 @@ export default function Layout({ children }) {
 
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {/* Inventory Item: Weapons */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -549,10 +678,14 @@ export default function Layout({ children }) {
                             />
                           </svg>
                           <p className="text-lg font-medium">Weapons (12)</p>
-                        </div>
+                        </motion.div>
 
                         {/* Inventory Item: Armor */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -568,10 +701,14 @@ export default function Layout({ children }) {
                             />
                           </svg>
                           <p className="text-lg font-medium">Armor (8)</p>
-                        </div>
+                        </motion.div>
 
                         {/* Inventory Item: Items */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -587,10 +724,14 @@ export default function Layout({ children }) {
                             />
                           </svg>
                           <p className="text-lg font-medium">Items (24)</p>
-                        </div>
+                        </motion.div>
 
                         {/* Inventory Item: Consumables */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -608,20 +749,34 @@ export default function Layout({ children }) {
                           <p className="text-lg font-medium">
                             Consumables (15)
                           </p>
-                        </div>
+                        </motion.div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ) : (
-                  <div className="overflow-hidden">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="overflow-hidden"
+                  >
                     <div className="relative z-10 text-white">
                       <h2 className="text-xl md:text-2xl font-bold mb-8">
                         SETTINGS & PREFERENCES
                       </h2>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+                      >
                         {/* Setting Item: Audio Settings */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -637,10 +792,14 @@ export default function Layout({ children }) {
                             />
                           </svg>
                           <p className="text-lg font-medium">Audio Settings</p>
-                        </div>
+                        </motion.div>
 
                         {/* Setting Item: Controls */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -656,10 +815,14 @@ export default function Layout({ children }) {
                             />
                           </svg>
                           <p className="text-lg font-medium">Controls</p>
-                        </div>
+                        </motion.div>
 
                         {/* Setting Item: Display */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -681,10 +844,14 @@ export default function Layout({ children }) {
                             />
                           </svg>
                           <p className="text-lg font-medium">Display</p>
-                        </div>
+                        </motion.div>
 
                         {/* Setting Item: Privacy */}
-                        <div className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer">
+                        <motion.div
+                          variants={itemVariants}
+                          whileHover={{ scale: 1.05 }}
+                          className="flex flex-col items-center justify-center p-4 bg-purple-800/50 rounded-lg shadow-md hover:bg-purple-700/60 transition duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                        >
                           <svg
                             className="w-10 h-10 text-white mb-2"
                             fill="none"
@@ -700,16 +867,16 @@ export default function Layout({ children }) {
                             />
                           </svg>
                           <p className="text-lg font-medium">Privacy</p>
-                        </div>
-                      </div>
+                        </motion.div>
+                      </motion.div>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
       </div>
-    </div>
+    </motion.div>
   )
 }

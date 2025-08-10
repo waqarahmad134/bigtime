@@ -2,14 +2,15 @@
 import { Settings, Search, Bell, LogOut } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 import Logo from "@/assets/Images/Logo2.png"
 import { useSidebar } from "@/context/SidebarContext"
+import { useRouting } from "@/context/RoutingContext"
 import { toast } from "react-hot-toast"
+import { getApi } from "@/lib/apiClient"
 
 function AdminLink() {
   const [isAdmin, setIsAdmin] = useState(false)
-
   useEffect(() => {
     const role = localStorage.getItem("role")
     if (role === "admin") {
@@ -43,13 +44,74 @@ function AdminLink() {
 }
 
 export default function RootHeader() {
+  const dropdownRef = useRef(null)
   const { isSidebarOpen, toggleSidebar } = useSidebar()
+  const { navigateWithLoading } = useRouting()
   const [searchQuery, setSearchQuery] = useState("")
   const [role, setRole] = useState("")
+  const [notifications, setNotifications] = useState(null)
+  const [notiCount, setNotiCount] = useState(0)
+  const [notificationOpen, setNotificationOpen] = useState(false)
+  const [balance, setBalance] = useState(0)
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+  const getBalance = async () => {
+    const data = await getApi("/wallet/balance")
+    console.log("🚀 ~ getBalance ~ data:", data?.balance)
+    setBalance(data?.balance)
+    localStorage.setItem("balance", data)
+  }
+
+  const getNotifications = async () => {
+    try {
+      const data = await getApi("/notifications")
+      const sortedNotifications = [...data]
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .slice(0, 3)
+      setNotifications(sortedNotifications)
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.detail ||
+          error.message ||
+          "Failed to fetch notifications.",
+      )
+    }
+  }
+
+  const notificationsCount = async () => {
+    try {
+      const data = await getApi("/notifications/unread-count")
+      setNotiCount(data?.unread_count)
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.detail ||
+          error.message ||
+          "Failed to fetch notifications.",
+      )
+    }
+  }
 
   useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setNotificationOpen(false)
+      }
+    }
+
+    if (notificationOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [notificationOpen])
+
+  useEffect(() => {
+    getBalance()
+    getNotifications()
+    notificationsCount()
     if (typeof window !== "undefined") {
       const storedRole = localStorage.getItem("role")
       setRole(storedRole || "Guest")
@@ -84,9 +146,9 @@ export default function RootHeader() {
         </div>
 
         <div className="ml-5">
-          <Link href="/newhome">
+          <button onClick={() => navigateWithLoading("/newhome")}>
             <Image src={Logo} alt="Big Time Logo" width={42} />
-          </Link>
+          </button>
         </div>
 
         {/* Search Bar */}
@@ -106,9 +168,9 @@ export default function RootHeader() {
 
       {/* RIGHT GROUP */}
       <div className="hidden md:flex items-center gap-2 md:gap-3 ml-auto ">
-        <Link
-          href="/wallet"
-          className="w-[52px] h-10 p-5 bg-[#4c2d80] rounded-xl flex items-center justify-center hover:bg-[#5d37a2]"
+        <button
+          onClick={() => navigateWithLoading("/wallet")}
+          className="min-w-[52px] h-10 p-5 bg-[#4c2d80] rounded-xl flex items-center justify-center hover:bg-[#5d37a2]"
         >
           <span className="text-white flex items-center gap-1">
             <svg
@@ -128,23 +190,56 @@ export default function RootHeader() {
                 fill="white"
               />
             </svg>
-            <span className="text-sm">0</span>
-          </span>
-        </Link>
-        <button className="w-8 h-8 p-5 bg-[#4c2d80] rounded-xl flex items-center justify-center hover:bg-[#5d37a2]">
-          <span className="text-white">
-            <Bell />
+            <span className="text-sm">{balance}</span>
           </span>
         </button>
 
-        <Link
-          href="/settings"
+        <div className="relative">
+          <button
+            ref={dropdownRef}
+            onClick={() => setNotificationOpen(!notificationOpen)}
+            className="cursor-pointer relative w-8 h-8 p-5 bg-[#4c2d80] rounded-xl flex items-center justify-center hover:bg-[#5d37a2]"
+          >
+            <span className="text-white">
+              <Bell />
+            </span>
+            <span className="absolute -top-1 -right-2 text-sm bg-[#EF4444] text-white rounded-full h-[20px] w-[20px] flex justify-center items-center">
+              {notiCount}
+            </span>
+          </button>
+          {notificationOpen && (
+            <div className="overflow-hidden absolute right-0 mt-2 w-80 bg-[#2b0a59] border border-white text-white rounded-lg shadow-lg z-50">
+              <div className="p-3 border-b font-bold">Notifications</div>
+              {notifications.length > 0 ? (
+                notifications.map((n) => (
+                  <div
+                    key={n.id}
+                    className="p-3 hover:bg-[#7A59FF] cursor-pointer border-b last:border-none"
+                  >
+                    <div className="font-semibold">{n.title}</div>
+                    <div className="text-sm">{n.message}</div>
+                    <div className="text-xs mt-1">
+                      {new Date(n.created_at).toLocaleString()}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-3 text-gray-500 text-sm">
+                  No notifications
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <button
+          onClick={() => navigateWithLoading("/settings")}
           className="w-8 h-8 p-5 bg-[#4c2d80] rounded-xl flex items-center justify-center hover:bg-[#5d37a2]"
         >
           <span className="text-white">
             <Settings />
           </span>
-        </Link>
+        </button>
 
         <AdminLink />
 
@@ -158,8 +253,8 @@ export default function RootHeader() {
         </button>
 
         {/* User Profile */}
-        <Link
-          href="/profile"
+        <button
+          onClick={() => navigateWithLoading("/profile")}
           className="h-8 p-5 bg-[#4c2d80] rounded-xl flex items-center gap-2 cursor-pointer"
         >
           <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
@@ -168,7 +263,7 @@ export default function RootHeader() {
           <div className="hidden sm:block text-white text-sm leading-tight">
             <p className="font-medium capitalize">{role}</p>
           </div>
-        </Link>
+        </button>
       </div>
     </header>
   )

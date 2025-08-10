@@ -35,6 +35,12 @@ export const getApi = async (endpoint, params = {}, customHeaders = {}) => {
   if (!res.ok) {
     const error = new Error(json?.detail || `GET ${url} failed with status ${res.status}`);
     error.status = res.status;
+    if(error.status === 401){
+      localStorage.removeItem("accessToken")
+      localStorage.removeItem("refreshToken")
+      localStorage.removeItem("role")
+      window.location.href = "/login"
+    }
     error.detail = json?.detail;
     throw error;
   }

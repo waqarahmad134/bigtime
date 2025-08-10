@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image"
 import RootHeader from "@/components/RootHeader";
 import { useSidebar } from "@/context/SidebarContext";
 import RootSidebar from "@/components/RootSidebar";
-
+import bgImageWallet from "@/assets/Images/referralbg.png"
 
 export default function LayoutContent({ children }) {
   const { isSidebarOpen } = useSidebar();
@@ -18,9 +19,16 @@ export default function LayoutContent({ children }) {
             isSidebarOpen ? "w-[calc(100%-256px)]" : "w-[calc(100%-80px)]"
           }`}
         >
-          <>
+          <div className="">
+          <Image
+        src={bgImageWallet}
+        alt="Background"
+        fill
+        className="object-cover pointer-events-none select-none -z-10"
+        priority
+      />
           {children}
-          </>
+          </div>
         </div>
       </main>
     </>
