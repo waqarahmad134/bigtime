@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import bgImageMobile from "@/assets/Images/mobileloginbgimg.png";
 import bgImageWallet from "@/assets/Images/referralbg.png";
 import dateIcon from "@/assets/Images/dateIcon.png";
@@ -79,86 +80,101 @@ const entries = [
     result: "Won",
   },
 ];
-  const steps = [
-    {
-      number: "1",
-      title: "Purchase of Virtual coin",
-      description:
-        "Players buy Coins, which are used in games within platform.",
+const steps = [
+  {
+    number: "1",
+    title: "Purchase of Virtual coin",
+    description: "Players buy Coins, which are used in games within platform.",
+  },
+  {
+    number: "2",
+    title: "Bonus Sweeps Coins",
+    description:
+      "In many sweepstakes casinos, purchasing Gold Coins also earns players bonus Sweeps Coins.",
+  },
+  {
+    number: "3",
+    title: "Redemption & Prizes",
+    description:
+      "Players can use Sweeps Coins to play games, and if they win, they can redeem those Sweeps Coins for real cash prizes.",
+  },
+];
+
+// Animation variants
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5 },
+};
+
+const staggerContainer = {
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
     },
-    {
-      number: "2",
-      title: "Bonus Sweeps Coins",
-      description:
-        "In many sweepstakes casinos, purchasing Gold Coins also earns players bonus Sweeps Coins.",
-    },
-    {
-      number: "3",
-      title: "Redemption & Prizes",
-      description:
-        "Players can use Sweeps Coins to play games, and if they win, they can redeem those Sweeps Coins for real cash prizes.",
-    },
-  ];
+  },
+};
+
+const listItem = {
+  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 20 },
+};
+
+const getBadgeStyle = (status) => {
+  switch (status) {
+    case "Won":
+      return "bg-green-600";
+    case "Lost":
+      return "bg-red-600";
+    case "Pending":
+      return "bg-yellow-500 text-black";
+    default:
+      return "bg-gray-400";
+  }
+};
+
 export default function Leaderboard() {
   const [activeTab, setActiveTab] = useState("All");
 
-  const getBadgeStyle = (status) => {
-    switch (status) {
-      case "Won":
-        return "bg-green-600";
-      case "Lost":
-        return "bg-red-600";
-      case "Pending":
-        return "bg-yellow-500 text-black";
-      default:
-        return "bg-gray-400";
-    }
-  };
   return (
-    <div className="relative min-h-screen flex flex-col pb-10">
-      {/* Background Images */}
-      <Image
-        src={bgImageMobile}
-        alt="Background Mobile"
-        fill
-        className="object-cover pointer-events-none select-none -z-10 block md:hidden"
-        priority
-      />
-      <Image
-        src={bgImageWallet}
-        alt="Background Desktop"
-        fill
-        className="object-cover pointer-events-none select-none -z-10 hidden md:block"
-        priority
-      />
-
-      <div className="min-h-screen  text-white p-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between rounded-xl px-6 py-4  min-h-[120px] space-y-4 md:space-y-0">
-          <div>
+    <div className="relative container m-auto pb-10">
+      <div className="min-h-screen text-white p-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between rounded-xl px-6 py-4 min-h-[120px] space-y-4 md:space-y-0">
+          <motion.div {...fadeIn} transition={{ ...fadeIn.transition, delay: 0.2 }}>
             <h2 className="text-lg md:text-xl font-bold">
               <span className="bg-gradient-to-r from-[#C084FC] to-[#3B82F6] bg-clip-text text-transparent text-2xl md:text-[30px]">
                 Sweepstakes Entries
               </span>
             </h2>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="overflow-x-auto p-4 bg-[#1F1339] rounded-lg text-white w-full">
+        <motion.div
+          {...fadeIn}
+          transition={{ ...fadeIn.transition, delay: 0.4 }}
+          className="overflow-x-auto p-4 bg-[#1F1339] rounded-lg text-white w-full"
+        >
           {/* Header Controls */}
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-4">
-            <input
+            <motion.input
+              {...fadeIn}
+              transition={{ ...fadeIn.transition, delay: 0.6 }}
               type="text"
               placeholder="🔍 Search prizes..."
               className="bg-[#2c2153] text-white px-4 py-2 rounded-md w-full sm:w-64 focus:outline-none"
             />
-            <div className="flex flex-col sm:flex-row gap-2">
-              <button className="px-4 py-2 text-sm bg-[#2c2153] rounded-md w-full sm:w-auto">
+            <motion.div
+              {...fadeIn}
+              transition={{ ...fadeIn.transition, delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-2"
+            >
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-4 py-2 text-sm bg-[#2c2153] rounded-md w-full sm:w-auto">
                 All Entries
-              </button>
-              <button className="px-4 py-2 text-sm bg-white text-black rounded-md w-full sm:w-auto">
+              </motion.button>
+              <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-4 py-2 text-sm bg-white text-black rounded-md w-full sm:w-auto">
                 Export CSV
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           </div>
 
           {/* Table Container */}
@@ -174,8 +190,10 @@ export default function Leaderboard() {
                     "Token Cost",
                     "Result",
                   ].map((title, idx, arr) => (
-                    <th
+                    <motion.th
                       key={idx}
+                      {...fadeIn}
+                      transition={{ ...fadeIn.transition, delay: 1 + idx * 0.1 }}
                       className={`${
                         title === "Result" ? "text-center" : "text-left"
                       } px-4 py-3 font-semibold ${
@@ -188,16 +206,22 @@ export default function Leaderboard() {
                     >
                       {title}{" "}
                       <ArrowDown className="inline w-3 h-3 ml-1 opacity-50" />
-                    </th>
+                    </motion.th>
                   ))}
                 </tr>
               </thead>
-
-              <tbody className="border border-[#E5E7EB]">
+              <motion.tbody
+                initial="hidden"
+                animate="visible"
+                variants={staggerContainer}
+                className="border border-[#E5E7EB]"
+              >
                 {entries.map((entry, idx) => (
-                  <tr
+                  <motion.tr
                     key={idx}
-                    className="border-b border-[#2c2153] hover:bg-[#2a1f4a] transition"
+                    variants={listItem}
+                    whileHover={{ backgroundColor: "#2a1f4a" }}
+                    className="border-b border-[#2c2153] transition"
                   >
                     <td className="px-4 py-3">{entry.prize}</td>
                     <td className="px-4 py-3">@{entry.username}</td>
@@ -215,37 +239,48 @@ export default function Leaderboard() {
                     <td className="px-4 py-3">⚡ {entry.tokens}</td>
                     <td className="px-4 py-3">
                       <div className="text-center">
-                        <span
-                          className={`px-3 py-1  rounded-full text-xs font-semibold ${getBadgeStyle(
+                        <motion.span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${getBadgeStyle(
                             entry.result
                           )}`}
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 200 }}
                         >
                           {entry.result}
-                        </span>
+                        </motion.span>
                       </div>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
-              </tbody>
+              </motion.tbody>
             </table>
           </div>
-        </div>
-        <div className=" py-12 ">
-      <div className=" mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
-        {steps.map((step, index) => (
-          <div
-            key={index}
-            className="bg-[#2C2153] rounded-xl shadow-lg p-6 text-center transition hover:scale-105 duration-300"
+        </motion.div>
+
+        <div className="py-12">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-white"
           >
-            <div className="w-10 h-10 mx-auto mb-4 rounded-full bg-[#9333EA4D] flex items-center justify-center font-bold">
-              {step.number}
-            </div>
-            <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-            <p className="text-sm text-gray-300">{step.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
+            {steps.map((step, index) => (
+              <motion.div
+                key={index}
+                variants={listItem}
+                whileHover={{ scale: 1.05 }}
+                className="bg-[#2C2153] rounded-xl shadow-lg p-6 text-center cursor-pointer"
+              >
+                <div className="w-10 h-10 mx-auto mb-4 rounded-full bg-[#9333EA4D] flex items-center justify-center font-bold">
+                  {step.number}
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                <p className="text-sm text-gray-300">{step.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </div>
   );
