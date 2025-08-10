@@ -56,9 +56,8 @@ export default function RootHeader() {
 
   const getBalance = async () => {
     const data = await getApi("/wallet/balance")
-    console.log("🚀 ~ getBalance ~ data:", data?.balance)
     setBalance(data?.balance)
-    localStorage.setItem("balance", data)
+    localStorage.setItem("balance", data?.balance)
   }
 
   const getNotifications = async () => {

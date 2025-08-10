@@ -1,11 +1,13 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
 import Image from "next/image"
-import bgImage from "@/assets/Images/referralbg.png" // Assuming this is the correct background for desktop
-import bgImageWallet from "@/assets/Images/referralbg.png"
+import { useRouting } from "@/context/RoutingContext"
+import React, { useEffect, useState } from "react"
 import gamesData from "@/app/games.json"
 import { ChevronDown, FilterIcon, RefreshCcw, ArrowDown } from "lucide-react"
+import { getApi, postApi } from "@/lib/apiClient"
+
+import toast from "react-hot-toast"
 
 const purchaseOptions = [
   { tokens: 11000, bonus: 1800, price: 99.99 },
@@ -56,31 +58,42 @@ const transactions = [
 ]
 
 export default function TokenWalletPage() {
+  const { navigateWithLoading } = useRouting()
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+  const [recipient, setRecipient] = useState("")
+  const [amount, setAmount] = useState("")
+  const [loading, setLoading] = useState(false)
   const { casinoSlots } = gamesData
-
   const [friendsData, setFriendsData] = useState(null)
   const [activeMainTab, setActiveMainTab] = useState("Token Operations")
   const [activeSubTab, setActiveSubTab] = useState("Add Tokens")
 
-  const mainTabs = ["Token Operations", "Games", "Transactions"]
-  const subTabs = ["Add Tokens", "Transfer to User", "Game Transfer"]
+  const handleTransfer = async () => {
+    if (!recipient || !amount) {
+      alert("Please enter both recipient and amount.")
+      return
+    }
+    try {
+      setLoading(true)
+      const res = await postApi("/wallet/transaction", {
+        action: "transfer",
+        amount: amount,
+        recipient: recipient,
+      })
+      toast("Tokens transferred successfully!")
+      setAmount("")
+      setRecipient("")
+    } catch (err) {
+      console.error("Transfer failed:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getFriends = async () => {
     try {
-      const token =
-        typeof window !== "undefined"
-          ? localStorage.getItem("accessToken")
-          : null
-      const response = await fetch(`${API_BASE_URL}/friends`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      const data = await response.json()
+      const data = await getApi("/friends")
+      console.log("🚀 ~ getFriends ~ data:", data)
       setFriendsData(data)
     } catch (err) {
       console.error("Friends fetch error:", err)
@@ -91,9 +104,11 @@ export default function TokenWalletPage() {
     getFriends()
   }, [])
 
+  const mainTabs = ["Token Operations", "Games", "Transactions"]
+  const subTabs = ["Add Tokens", "Transfer to User", "Game Transfer"]
+
   return (
     <div className="relative min-h-screen pb-10">
-      
       <div className="container m-auto text-white p-6">
         <div className="mt-3 mb-5">
           <h2 className="font-bebas-neue tracking-wide text-5xl">
@@ -134,7 +149,9 @@ export default function TokenWalletPage() {
                 BTX Balance
               </div>
 
-              <div className="text-4xl font-bold text-[#FFB800]">9,753.00</div>
+              <div className="text-4xl font-bold text-[#FFB800]">
+                {localStorage.getItem("balance") || "0"}
+              </div>
             </div>
           </div>
         </div>
@@ -194,7 +211,7 @@ export default function TokenWalletPage() {
                       className="w-full bg-[#1a0d2e] rounded-md px-4 py-3 pr-28 text-white placeholder-gray-500  border border-[#52388E] focus:outline-none focus:ring-2 focus:ring-[#7A59FF]"
                     />
 
-                    <button className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-[#7A59FF] hover:bg-[#6c4fe0] text-white font-semibold rounded-md transition-colors duration-200">
+                    <button onClick={()=>navigateWithLoading("/payment")} className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-[#7A59FF] hover:bg-[#6c4fe0] text-white font-semibold rounded-md transition-colors duration-200">
                       Next
                     </button>
                   </div>
@@ -266,8 +283,10 @@ export default function TokenWalletPage() {
                     id="transfer_type"
                     required
                     className="px-6 py-4 w-full text-white rounded-lg border border-[#52388E] focus:outline-none focus:ring-2 focus:ring-[#7A59FF]"
+                    value={recipient}
+                    onChange={(e) => setRecipient(e.target.value)}
                   >
-                    <option value="" disabled selected>
+                    <option value="" disabled>
                       Enter Username
                     </option>
                     {friendsData?.map((frd, index) => (
@@ -290,13 +309,23 @@ export default function TokenWalletPage() {
                       type="number"
                       placeholder="10"
                       required
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
                       className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-3 w-full py-3 text-white rounded-lg border border-[#52388E] focus:outline-none focus:ring-2 focus:ring-[#7A59FF]"
                     />
                   </div>
                 </div>
                 <div className="text-center mt-8">
-                  <button className="cursor-pointer w-full px-6 py-3 bg-[#7A59FF] hover:bg-[#6c4fe0] font-semibold rounded-md transition-colors duration-200">
-                    Add tokens
+                  <button
+                    disabled={loading}
+                    onClick={handleTransfer}
+                    className={`cursor-pointer w-full px-6 py-3 font-semibold rounded-md transition-colors duration-200 ${
+                      loading
+                        ? "bg-gray-500 cursor-not-allowed"
+                        : "bg-[#7A59FF] hover:bg-[#6c4fe0]"
+                    }`}
+                  >
+                    {loading ? "Processing..." : "Add tokens"}
                   </button>
                 </div>
               </div>
