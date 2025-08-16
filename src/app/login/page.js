@@ -179,25 +179,25 @@ export default function LoginPage() {
                 />
                 <span className="ml-2 font-semibold">Remember me</span>
               </label>
-              <span className="ml-2 cursor-pointer font-semibold">Forget password</span>
+              {/* <span className="ml-2 cursor-pointer font-semibold">Forget password</span> */}
             </div>
           </form>
 
           <div className="mt-6 text-center text-gray-300 text-sm border-t pt-3 border-[#727272]">
-            Don’t have an account? <Link href="/signup" className="text-[#9D5CE9]">Sign up</Link>
+            {/* Don’t have an account? <Link href="/signup" className="text-[#9D5CE9]">Sign up</Link> */}
           </div>
 
-          <div className="mt-3">
-            <p className="text-start text-gray-300 mb-3">Or continue with</p>
-            <div className="flex gap-1 justify-center w-full">
-              <button className="flex w-full items-center justify-center gap-2 bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-2 rounded-xl">
-                <Image src={google} alt="google" />
-              </button>
-              <button className="flex w-full items-center justify-center gap-2 bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-2 rounded-xl">
-                <Image src={facebook} alt="facebook" />
-              </button>
-            </div>
-          </div>
+            {/* <div className="mt-3">
+              <p className="text-start text-gray-300 mb-3">Or continue with</p>
+              <div className="flex gap-1 justify-center w-full">
+                <button className="flex w-full items-center justify-center gap-2 bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-2 rounded-xl">
+                  <Image src={google} alt="google" />
+                </button>
+                <button className="flex w-full items-center justify-center gap-2 bg-[#3B2063] hover:bg-opacity-30 transition px-4 py-2 rounded-xl">
+                  <Image src={facebook} alt="facebook" />
+                </button>
+              </div>
+            </div> */}
 
           <p className="mt-4 text-xs text-gray-400 text-start">
             By registering you agree with our{" "}

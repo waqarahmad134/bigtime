@@ -83,7 +83,7 @@ export default function Homes() {
         </div>
 
         {/* Casino Slots Section */}
-        <h3 className="text-xl font-bold my-4">Casino Slots</h3>
+        <h3 className="text-xl font-bold my-4">Casino's</h3>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
           {gamesData?.casinoSlots?.map((game, gameIdx) => (
             <motion.div

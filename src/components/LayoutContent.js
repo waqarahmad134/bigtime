@@ -19,15 +19,15 @@ export default function LayoutContent({ children }) {
             isSidebarOpen ? "w-[calc(100%-256px)]" : "w-[calc(100%-80px)]"
           }`}
         >
-          <div className="">
-          <Image
-        src={bgImageWallet}
-        alt="Background"
-        fill
-        className="object-cover pointer-events-none select-none -z-10"
-        priority
-      />
-          {children}
+          <div className="min-h-[calc(100vh-64px)] ">
+            <Image
+              src={bgImageWallet}
+              alt="Background"
+              fill
+              className="object-cover pointer-events-none select-none -z-10"
+              priority
+            />
+            {children}
           </div>
         </div>
       </main>
