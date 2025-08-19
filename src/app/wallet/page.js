@@ -81,7 +81,7 @@ export default function TokenWalletPage() {
   const [recipient, setRecipient] = useState("")
   const [amount, setAmount] = useState("")
   const [loading, setLoading] = useState(false)
-  const { casinoSlots } = gamesData
+  const { casinos } = gamesData
   const [friendsData, setFriendsData] = useState(null)
   const [activeMainTab, setActiveMainTab] = useState("Token Operations")
   const [activeSubTab, setActiveSubTab] = useState("Add Tokens")
@@ -109,13 +109,61 @@ export default function TokenWalletPage() {
     }
   }
 
+  const handleExternalTransfer = async () => {
+    const externalGameData =
+      typeof window !== "undefined" ? localStorage.getItem("externalGameData") : null
+    if (!externalGameData) {
+      alert("Please Connect Casino First")
+      return
+    }
+    try {
+      toast("Tokens transferred successfully!")
+    } catch (err) {
+      console.error("Transfer failed:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const getFriends = async () => {
     try {
       const data = await getApi("/friends")
-      console.log("🚀 ~ getFriends ~ data:", data)
       setFriendsData(data)
     } catch (err) {
       console.error("Friends fetch error:", err)
+    }
+  }
+
+  const userProfileApi = async () => {
+    try {
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("accessToken")
+          : null
+
+      const response = await fetch(`${API_BASE_URL}/games/user-profile/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+
+        body: JSON.stringify({
+          game_id: "4e375a20-f793-44e1-a9ef-f140dc5ea94a",
+          game_user_id: "casino_user_12345",
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      console.log("API Response:", data)
+      return data
+    } catch (error) {
+      console.error("Error calling API:", error)
+      return null
     }
   }
 
@@ -124,6 +172,7 @@ export default function TokenWalletPage() {
       setBalance(localStorage.getItem("balance") || "0")
     }
     getFriends()
+    userProfileApi()
   }, [])
 
   const mainTabs = ["Token Operations", "Games", "Transactions"]
@@ -186,9 +235,7 @@ export default function TokenWalletPage() {
                 BTX Balance
               </div>
 
-              <div className="text-4xl font-bold text-[#FFB800]">
-                {balance}
-              </div>
+              <div className="text-4xl font-bold text-[#FFB800]">{balance}</div>
             </div>
           </div>
         </motion.div>
@@ -431,16 +478,18 @@ export default function TokenWalletPage() {
                     className="border border-[#52388E] rounded-2xl p-4"
                   >
                     <div className="mb-6">
-                      <h2 className="text-2xl font-bold">Transfer to Game</h2>
+                      <h2 className="text-2xl font-bold">
+                        Transfer to Casino (First connect )
+                      </h2>
                       <p className="text-lg">
-                        Add BTX tokens to your game account.
+                        Add BTX tokens to your casino account.
                       </p>
                     </div>
 
                     <div className="space-y-5">
                       <motion.div variants={itemVariants}>
                         <label className="block text-base text-gray-200 mt-5 mb-2">
-                          Select a Game
+                          Select a Casino
                         </label>
                         <select
                           id="transfer_type"
@@ -450,7 +499,7 @@ export default function TokenWalletPage() {
                           <option value="" disabled selected>
                             Enter a Game Name
                           </option>
-                          {casinoSlots?.map((game, index) => (
+                          {casinos?.map((game, index) => (
                             <option
                               className="text-black"
                               key={index}
@@ -478,13 +527,12 @@ export default function TokenWalletPage() {
                       </motion.div>
                     </div>
                     <div className="text-center mt-8">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                      <button
+                        onClick={handleExternalTransfer}
                         className="cursor-pointer w-full px-6 py-3 bg-[#7A59FF] hover:bg-[#6c4fe0] font-semibold rounded-md transition-colors duration-200"
                       >
-                        Transfer Tokens
-                      </motion.button>
+                        Transfer Tokens To Casino
+                      </button>
                     </div>
                   </motion.div>
                 )}

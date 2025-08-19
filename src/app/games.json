@@ -233,5 +233,19 @@
       "action": "https://warmageddon.online/demo-play/penguins-slots",
       "price": "64$"
     }
+  ],
+
+  "casinos": [
+    {
+      "id": 1,
+      "title": "Warmageddon",
+      "description": "Based on available information, “Warmageddon” is likely not a legitimate online gambling or slots site. It’s best to avoid any interaction or transactions with this domain, as there are high risks related to trust, security, and legality.If you’re looking for reliable online casino or slot platforms, I can help point you toward licensed and well-reviewed options. Just let me know what type of games you're interested in (like slots, blackjack, or something else), and I’ll guide you toward safe and reputable sites.",
+      "image": "https://warmageddon.online/frontend/landing/images/bannerbg1.jpg",
+      "cover": "/images/desert-rally.jpg",
+      "rating": "4.9",
+      "action": "https://warmageddon.online/demo-play/blackjack21",
+      "price": "79$",
+      "gamesApi": "https://snurr.casino/warmageddon/api/allgames"   
+    }
   ]
 }

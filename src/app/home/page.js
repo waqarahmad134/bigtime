@@ -46,6 +46,49 @@ export default function Homes() {
           </div>
         </div>
 
+        {/* Casino Slots Section */}
+        <h3 className="text-2xl font-bold my-4">Casino's Sites</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
+          {gamesData?.casinos?.map((game, gameIdx) => (
+            <motion.div
+              key={game.title + gameIdx}
+              className="rounded bg-[#2b0a59] overflow-hidden cursor-pointer hover:scale-105"
+              // onClick={() => navigateWithLoading("/gameinfo")}
+              onClick={() => {
+                const slug = game.title
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")
+                  .replace(/[^a-z0-9\-]/g, "")
+                router.push(`/casinos/${slug}`)
+              }}
+              variants={fadeSlide}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="relative rounded-t-lg overflow-hidden">
+                <Image
+                  src={game.image}
+                  alt={game.title}
+                  width={100}
+                  height={192}
+                  unoptimized
+                  className="w-full h-20 md:h-48 object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                  <h2 className="text-lg font-bold leading-5">{game.title}</h2>
+                </div>
+              </div>
+              {/* <div className="flex justify-between items-center text-sm bg-[#9F2427] p-2">
+                <span>{game.price}</span>
+                <span className="flex items-center gap-1">
+                  <span className="text-white">★</span> {game.rating}
+                </span>
+              </div> */}
+            </motion.div>
+          ))}
+        </div>
+
         {/* Casino Games Section */}
         <h3 className="text-xl font-bold my-4">Casino Games</h3>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
@@ -53,7 +96,7 @@ export default function Homes() {
             <motion.div
               key={game.title + gameIdx}
               className="rounded bg-[#2b0a59] overflow-hidden cursor-pointer"
-              onClick={() => navigateWithLoading("/gameinfo")}
+              onClick={() => navigateWithLoading("/casinos")}
               variants={fadeSlide}
               initial="hidden"
               whileInView="visible"
@@ -82,41 +125,6 @@ export default function Homes() {
           ))}
         </div>
 
-        {/* Casino Slots Section */}
-        <h3 className="text-xl font-bold my-4">Casino's</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-2 md:gap-4">
-          {gamesData?.casinoSlots?.map((game, gameIdx) => (
-            <motion.div
-              key={game.title + gameIdx}
-              className="rounded bg-[#2b0a59] overflow-hidden cursor-pointer"
-              onClick={() => navigateWithLoading("/gameinfo")}
-              variants={fadeSlide}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <div className="relative rounded-t-lg overflow-hidden">
-                <Image
-                  src={game.image}
-                  alt={game.title}
-                  width={100}
-                  height={192}
-                  unoptimized
-                  className="w-full h-20 md:h-48 object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                  <h2 className="text-sm font-bold leading-5">{game.title}</h2>
-                </div>
-              </div>
-              <div className="flex justify-between items-center text-sm bg-[#9F2427] p-2">
-                <span>{game.price}</span>
-                <span className="flex items-center gap-1">
-                  <span className="text-white">★</span> {game.rating}
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </motion.div>
     </div>
   )
