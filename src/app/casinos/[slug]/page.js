@@ -72,7 +72,7 @@ export default function Homes({ params }) {
     setLoading(true)
     try {
       const response = await fetch(
-        "https://snurr.casino/warmageddon/api/login",
+        "https://snurr.casino/api/login",
         {
           method: "POST",
           headers: {
