@@ -1,17 +1,18 @@
-"use client"
-import { useState } from "react"
-import { Search } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
-import gamesData from "@/app/games.json"
-import marketPlaceItems from "@/app/marketPlaceItems.json"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
+"use client";
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import gamesData from "@/app/games.json";
+import marketPlaceItems from "@/app/marketPlaceItems.json";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Shop() {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [searchQuery, setSearchQuery] = useState("")
-  console.log(marketPlaceItems)
+  const [searchQuery, setSearchQuery] = useState("");
+  console.log(marketPlaceItems);
   return (
     <>
       <div className="relative container mx-auto p-6">
@@ -32,7 +33,7 @@ export default function Shop() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div>
+            <div className="flex gap-4">
               <div className="text-center">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -41,6 +42,18 @@ export default function Shop() {
                 >
                   Buy BTX
                 </motion.button>
+              </div>
+
+              <div className="text-center">
+                <Link href="/sellbtx">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-2 bg-[#7A59FF] hover:bg-[#6c4fe0] rounded-md transition-colors duration-200"
+                  >
+                    Sell BTX
+                  </motion.button>
+                </Link>
               </div>
             </div>
           </div>
@@ -53,8 +66,8 @@ export default function Shop() {
                 const slug = data?.title
                   .toLowerCase()
                   .replace(/\s+/g, "-")
-                  .replace(/[^a-z0-9\-]/g, "")
-                router.push(`/shop/${slug}`)
+                  .replace(/[^a-z0-9\-]/g, "");
+                router.push(`/shop/${slug}`);
               }}
               className="cursor-pointer"
               key={index + data?.id}
@@ -100,5 +113,5 @@ export default function Shop() {
         </section>
       </div>
     </>
-  )
+  );
 }
