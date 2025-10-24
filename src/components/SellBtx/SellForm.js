@@ -4,19 +4,21 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import OrderSummary from "./OrderSummary";
 
-export default function SellForm({ setIsModalOpen }) {
-  const [amount, setAmount] = useState("");
-  const [price, setPrice] = useState("");
-
+export default function SellForm({
+  setIsModalOpen,
+  setAmount,
+  setPricePerToken,
+  amount,
+  pricePerToken,
+}) {
   const platformFee = 0.02;
-  const total = amount && price ? amount * price : 0;
+  const total = amount && pricePerToken ? amount * pricePerToken : 0;
   const fee = total * platformFee;
   const receive = total - fee;
 
-  const handleSubmit = () => {
-    if (!amount || !price) return toast.error("Enter amount and price!");
+  const handleSubmit = async () => {
+    if (!amount || !pricePerToken) return toast.error("Enter amount and price!");
     setIsModalOpen(true);
-    toast.success("Listing created successfully!");
   };
 
   return (
@@ -45,8 +47,8 @@ export default function SellForm({ setIsModalOpen }) {
       </label>
       <input
         type="number"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        value={pricePerToken}
+        onChange={(e) => setPricePerToken(e.target.value)}
         placeholder="Set Your Price"
         className="w-full px-6 font-poppins h-[47px] backdrop-blur-sm bg-[rgba(122,89,255,0.28)] rounded-lg mb-2
           text-white focus:outline-none focus:border-[#9b6cff] placeholder:text-white placeholder:font-light"
@@ -56,7 +58,7 @@ export default function SellForm({ setIsModalOpen }) {
       </p>
 
       {/* Order Summary */}
-      <OrderSummary amount={amount} price={price} fee={fee} receive={receive} />
+      <OrderSummary amount={amount} price={pricePerToken} fee={fee} receive={receive} />
 
       {/* Submit Button */}
       <button
