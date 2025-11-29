@@ -175,7 +175,7 @@ export default function RootSidebar() {
   return (
     <>
       {isSidebarOpen ? (
-        <div className="scrollbar-hide fixed left-0 w-64 h-screen bg-[#2b0a59] text-white z-50 overflow-y-auto">
+        <div className=" scrollbar-hide fixed left-0 w-64 h-screen bg-[#2b0a59] text-white z-50 overflow-y-auto">
           <aside className="w-full p-4 text-white flex flex-col">
             <nav className="flex flex-col gap-2 flex-grow overflow-y-auto">
               {links?.map(({ name, href, icon: Icon }) => (

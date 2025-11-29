@@ -8,9 +8,7 @@
       "cover": "",
       "rating": "4.1",
       "action": "https://www.roblox.com/games/7554888362/SKY-SQUID-Squid-Game-X",
-      "price": "67$",
-      "isLaunchGame": false
-
+      "price": "67$"
     },
     {
       "id": 2,
@@ -20,8 +18,7 @@
       "cover": "/images/desert-rally.jpg",
       "rating": "4.7",
       "action": "https://www.roblox.com/games/2753915549/Blox-Fruits",
-      "price": "29$",
-      "isLaunchGame": true
+      "price": "29$"
     },
     {
       "id": 3,
@@ -248,7 +245,7 @@
       "rating": "4.9",
       "action": "https://warmageddon.online/demo-play/blackjack21",
       "price": "79$",
-      "gamesApi": "https://snurr.casino/warmageddon/api/allgames"
+      "gamesApi": "https://snurr.casino/warmageddon/api/allgames"   
     }
   ]
 }

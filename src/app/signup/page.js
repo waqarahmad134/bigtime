@@ -299,7 +299,7 @@ export default function signup({ referralCode = "" }) {
                     <span className="ml-2 cursor-pointer text-[white]">
                       HAVE AN ACCOUNT?
                       <span
-                        className="text-[white]"
+                        className="text-[white] ml-1"
                         onClick={(e) => {
                           e.preventDefault()
                           router.push("/login")
