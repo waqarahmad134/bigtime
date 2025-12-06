@@ -19,7 +19,7 @@ export default function WelcomeDev() {
 
         {/* welcome dev text and cards */}
         <div className=" container relative mx-auto">
-          <div className="px-4 py-2 gap-6 mb-5 flex flex-col">
+          <div className="py-2 gap-6 mb-5 flex flex-col">
             <div className="w-full">
               <h1 className="font-poppins capitalize text-white font-semibold text-2xl md:text-4xl">
                 Welcome back, developer
